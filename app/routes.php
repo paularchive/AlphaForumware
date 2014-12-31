@@ -24,6 +24,7 @@ Route::group(array('prefix' => 'forum'), function()
 		Route::get('/group/{id}/delete', array('uses' => 'ForumController@deleteGroup', 'as' => 'forum-delete-group'));
 		Route::get('/category/{id}/delete', array('uses' => 'ForumController@deleteCategory', 'as' => 'forum-delete-category'));
 		Route::get('/thread/{id}/delete', array('uses' => 'ForumController@deleteThread', 'as' => 'forum-delete-thread'));
+		Route::get('/comment/{id}/delete', array('uses' => 'ForumController@deleteComment', 'as' => 'forum-delete-comment'));
 
 		Route::group(array('before' => 'csrf'), function()
 		{
@@ -38,6 +39,7 @@ Route::group(array('prefix' => 'forum'), function()
 		Route::group(array('before' => 'csrf'), function()
 		{
 			Route::post('/thread/{id}/new', array('uses' => 'ForumController@storeThread', 'as' => 'forum-store-thread'));
+			Route::post('/comment/{id}/new', array('uses' => 'ForumController@storeComment', 'as' => 'forum-store-comment'));
 		});
 	});
 });
