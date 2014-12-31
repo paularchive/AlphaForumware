@@ -1,5 +1,6 @@
 $(document).ready(function ()
 {
+
 	$('#form_submit').click(function ()
 	{
 		$('#target_form').submit();
@@ -17,13 +18,13 @@ $(document).ready(function ()
 		$('#category_form').prop('action', '/forum/category/'+pieces[2]+'/new');
 	});
 
-	$('.delete_group').click(function (event)
+	$('.delete-group').hover(function (event) //Load the popover propities onhover (don't know another way atm)
 	{
-		$('#btn_delete_group').prop('href', '/forum/group/'+event.target.id+'/delete');
+		$('.delete-group').popover({placement: 'top', trigger: 'focus', html: true, content: '<p>Are you shure?</p><a href="/forum/group/'+event.target.id+'/delete" class="btn btn-warning btn-sm">Confirm</a>'});
 	});
 	
-	$('.delete_category').click(function(event)
+	$('.delete-category').hover(function(event)
 	{
-		$('#btn_delete_category').prop('href', '/forum/category/'+event.target.id+'/delete');
+		$('.delete-category').popover({placement: 'top', trigger: 'focus', html: true, content: '<p>Are you shure?</p><a href="/forum/category/'+event.target.id+'/delete" class="btn btn-warning btn-sm">Confirm</a>'});
 	});
 });

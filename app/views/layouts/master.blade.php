@@ -4,6 +4,7 @@
 	@section('head')
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/style.css">
 	@show
 </head>
 <body>
@@ -20,13 +21,13 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="{{ URL::route('home') }}">Home</a></li>
-					<li><a href="{{ URL::route('forum-home') }}">Forum</a></li>
+					<li{{ HTML::menu_active('/', true) }}><a href="{{ URL::route('home') }}">Home</a></li>
+					<li{{ HTML::menu_active('forum') }}><a href="{{ URL::route('forum-home') }}">Forum</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					@if(!Auth::check())
-						<li><a href="{{ URL::route('getCreate') }}">Register</a></li>
-						<li><a href="{{ URL::route('getLogin') }}">Login</a></li>
+						<li{{ HTML::menu_active('user/create') }}><a href="{{ URL::route('getCreate') }}">Register</a></li>
+						<li{{ HTML::menu_active('user/login') }}><a href="{{ URL::route('getLogin') }}">Login</a></li>
 					@else
 						<li><a href="{{ URL::route('getLogout') }}">Logout</a></li>
 					@endif

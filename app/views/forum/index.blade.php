@@ -9,13 +9,12 @@
 
 <ol class="breadcrumb">
 	<li class="active">Forum</li>
+	@if(Auth::check() && Auth::user()->isAdmin())
+		<a href="#" class="btn btn-default btn-xs pull-right" data-toggle="modal" data-target="#group_form">Add Group!</a>
+	@endif
 </ol>
 
-@if(Auth::check() && Auth::user()->isAdmin())
-<div>
-	<a href="#" class="btn btn-default" data-toggle="modal" data-target="#group_form">Add Group!</a>
-</div>
-@endif
+
 
 @foreach($groups as $group)
 	<div class="panel panel-primary">
@@ -24,7 +23,7 @@
 			<div class="clearfix">
 				<h3 class="panel-title pull-left">{{ $group->title }}</h3>
 				<a href="#" data-toggle="modal" data-target="#category_modal" id="add-category-{{ $group->id }}" class="label label-success btn-xs pull-right new_category">New Category</a>
-				<a href="#" data-toggle="modal" data-target="#group_delete" id="{{ $group->id }}" class="label label-danger pull-right delete_group">Delete</a>
+				<a href="#" data-toggle="popover" id="{{ $group->id }}" class="label label-danger pull-right delete-group">Delete</a>
 			</div>
 			@else
 				<h3 class="panel-title">{{ $group->title }}</h3>
@@ -128,6 +127,9 @@
 @section('javascript')
 	@parent
 	<script type="text/javascript" src="/js/app.js"></script>
+	<script type="text/javascript">
+		
+	</script>
 	@if(Session::has('modal'))
 		<script type="text/javascript">
 			$('{{ Session::get('modal') }}').modal('show');

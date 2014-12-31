@@ -18,13 +18,15 @@
 		<div class="clearfix">
 			<h3 class="panel-title pull-left">{{ $category->title }}</h3>
 			<a href="{{ URL::route('forum-get-new-thread', $category->id) }}" class="label label-success pull-right">New Tread</a>
-			<a href="#" data-toggle="modal" data-target="#category_delete" id="{{ $category->id }}" class="label label-danger pull-right delete_category">Delete</a>
+			<a href="#" data-toggle="popover" id="{{ $category->id }}" class="label label-danger pull-right delete-category">Delete</a>
 		</div>
-		@else
+		@elseif(Auth::check())
 		<div class="clearfix">
 			<h3 class="panel-title pull-left">{{ $category->title }}</h3>
 			<a href="{{ URL::route('forum-get-new-thread', $category->id) }}" class="label label-success pull-right">New Tread</a>
 		</div>
+		@else
+			<h3 class="panel-title">{{ $category->title }}</h3>
 		@endif
 	</div>
 	<div class="list-group">

@@ -1,0 +1,12 @@
+.popover-content {
+	padding: 0;
+}
+
+.popover-content p{
+	padding: 9px 14px 0;
+	color:black;
+}
+
+.popover-content a{
+	width: 100%;
+}
