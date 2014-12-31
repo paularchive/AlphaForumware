@@ -234,7 +234,7 @@ class ForumController extends BaseController {
 
 		if($validate->fails())
 		{
-			return Redirect('forum-thread', $id)->withInput()->withErrors($validate)->with('fail', "Please fill in the form correctly!");
+			return Redirect::route('forum-thread', $id)->withInput()->withErrors($validate)->with('fail', "Please fill in the form correctly!");
 		}
 		else
 		{
