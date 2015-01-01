@@ -18,7 +18,7 @@
 		<div class="clearfix">
 			<h3 class="panel-title pull-left">{{ $category->title }}</h3>
 			<a href="{{ URL::route('forum-get-new-thread', $category->id) }}" class="label label-success pull-right">New Tread</a>
-			<a href="#" data-toggle="popover" id="{{ $category->id }}" class="label label-danger pull-right delete-category">Delete</a>
+			<a href="#" data-toggle="popover" data-id="{{ $category->id }}" data-what="category" class="label label-danger delete-btn pull-right">Delete</a>
 		</div>
 		@elseif(Auth::check())
 		<div class="clearfix">
