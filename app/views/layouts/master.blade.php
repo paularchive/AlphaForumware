@@ -51,6 +51,12 @@
 	@section('javascript')
 	<script src="//code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+	$('.alert').each(function()
+	{
+		$(this).delay(10000).fadeOut('fast', function() {$(this).remove();});
+	});
+	</script>
 	@show
 </body>
 </html>
