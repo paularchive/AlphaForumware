@@ -10,14 +10,3 @@
 .popover-content a{
 	width: 100%;
 }
-
-
-/*This is to fix the alert!*/
-.alert {
-	position:fixed;
-	bottom: 1%;
-	left: 15%;
-	width: 70%;
-	opacity: 0.9;
-	z-index:100;
-}

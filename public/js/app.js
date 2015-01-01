@@ -18,27 +18,13 @@ $(document).ready(function ()
 		$('#category_form').prop('action', '/forum/category/'+pieces[2]+'/new');
 	});
 
-	$('.delete-btn').each(function()
+	$('.delete-group').hover(function (event) //Load the popover propities onhover (don't know another way atm)
 	{
-		var _this = $(this);
-		var id = $(this).attr('data-id');
-		var what = $(this).attr('data-what');
-		$(this).popover({placement: 'left', html: true, content: '<p>Are you shure?</p><a href="/forum/'+what+'/'+id+'/delete" class="btn btn-warning btn-sm">Confirm</a><button class="btn btn-default delete-btn-close btn-sm">Cancel</button>'});
-		$(this).popover();
-		$(this).on('click', function(e)
-		{
-			e.preventDefault(true);
-		});
-
-		$('.delete-btn-close').each(function()
-		{
-			$(this).click(function()
-			{
-			console.log('True');
-			$(_this).popover('destroy');
-			alert(_this);
-			});
-		});
+		$('.delete-group').popover({placement: 'top', trigger: 'focus', html: true, content: '<p>Are you shure?</p><a href="/forum/group/'+event.target.id+'/delete" class="btn btn-warning btn-sm">Confirm</a>'});
 	});
-
+	
+	$('.delete-category').hover(function(event)
+	{
+		$('.delete-category').popover({placement: 'top', trigger: 'focus', html: true, content: '<p>Are you shure?</p><a href="/forum/category/'+event.target.id+'/delete" class="btn btn-warning btn-sm">Confirm</a>'});
+	});
 });
