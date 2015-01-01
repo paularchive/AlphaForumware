@@ -1,32 +1,25 @@
-## AlphaForumware
+## Laravel PHP Framework
 
-AlphaForumware is a forum application written in PHP. We use the Laravel PHP Framework and Bootstrap 3.3.1. It's possible to:
-* Register(guest)
-* Login(every user)
-* Create Forum Groups/Delete(admin)
-* Create Forum Categories in Groups/Delete(admin)
-* Create Threads in Categories (normal user)
-* Comments are coming soon!
+[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
+[![Total Downloads](https://poser.pugx.org/laravel/framework/downloads.svg)](https://packagist.org/packages/laravel/framework)
+[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
+[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
+[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
 
-Dependencies
-------------
-* PHP 5.5+
-* Composer
-* Apache/Unix
-* MySQL or another database supported by Laravel
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, and caching.
 
-Installation
-------------
-AlphaForumware is build in the Laravel PHP Framework so you have to do some standard things to get it to work:
-* Install composer on your computer (documentation coming soon)
-* Open a Terminal or CommandPrompt in the AlphaForumware root folder and enter `composer install` this will install laravel and some other dependencies. (can take a while)
-* When that is done you have to go to the folder app and rename `config-sample` to `config` and enter that folder, now change your database settings in `database.php`
-* Now open your Terminal or CommandPrompt and now run `php artisan migrate` in the root folder of your installation, this will configure your database.
-* Now you should be able to register and login.
-There isn't a way to make yourself an admin using the interface a.t.m. so you have to login into your database take for example phpMyAdmin and press on the `users` table and change the isAdmin value to `1`
+Laravel aims to make the development process a pleasing one for the developer without sacrificing application functionality. Happy developers make the best code. To this end, we've attempted to combine the very best of what we have seen in other web frameworks, including frameworks implemented in other languages, such as Ruby on Rails, ASP.NET MVC, and Sinatra.
 
-Credits
--------
-* Laravel PHP Framework: http://laravel.com
-* Twitter Bootstrap: http://getbootstrap.com/
+Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
 
+## Official Documentation
+
+Documentation for the entire framework can be found on the [Laravel website](http://laravel.com/docs).
+
+### Contributing To Laravel
+
+**All issues and pull requests should be filed on the [laravel/framework](http://github.com/laravel/framework) repository.**
+
+### License
+
+The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
