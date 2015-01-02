@@ -25,11 +25,13 @@ Route::group(array('prefix' => 'forum'), function()
 		Route::get('/category/{id}/delete', array('uses' => 'ForumController@deleteCategory', 'as' => 'forum-delete-category'));
 		Route::get('/thread/{id}/delete', array('uses' => 'ForumController@deleteThread', 'as' => 'forum-delete-thread'));
 		Route::get('/comment/{id}/delete', array('uses' => 'ForumController@deleteComment', 'as' => 'forum-delete-comment'));
+		Route::get('/group/{id}/edit', array('uses' => 'ForumController@editGroup', 'as' => 'forum-edit-group'));
 
 		Route::group(array('before' => 'csrf'), function()
 		{
 			Route::post('/category/{id}/new', array('uses' => 'ForumController@storeCategory', 'as' => 'forum-store-category'));
 			Route::post('/group', array('uses' => 'ForumController@storeGroup', 'as' => 'forum-store-group'));
+			Route::post('/group/{id}/edit', array('uses' => 'ForumController@editGroup', 'as' => 'forum-edit-group'));
 		});
 	});
 	Route::group(array('before' => 'auth'), function()

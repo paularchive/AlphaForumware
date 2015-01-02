@@ -75,6 +75,41 @@ class ForumController extends BaseController {
 		}
 	}
 
+	public function editGroup($id)
+	{
+		if(Request::ajax())
+		{
+			return Response::json(array('group' => ForumGroup::find($id)));
+		}
+
+		$rules = array(
+			'group_name_edit' => 'required|unique:forum_groups,title'
+		);
+
+		$messages = array(
+			'required' => 'Please fill in the group name',
+			'unique' => 'That name has already been taken!'
+		);
+
+		$validate = Validator::make(Input::all(), $rules, $messages);
+
+		if($validate->fails())
+		{
+			return Redirect::route('forum-home')->withInput()->withErrors($validate)->with('group-edit', '#group_edit')->with('group-id', $id);
+		}
+		else
+		{
+			$group = ForumGroup::find($id);
+			$group->title = Input::get('group_name_edit');
+			$group->author_id = Auth::user()->id;
+
+			if($group->save())
+				return Redirect::route('forum-home')->with('success', 'The group is edited.');
+			else
+				return Redirect::route('forum-home')->with('fail', 'An error occured while saving the new group. Please try again.');
+		}
+	}
+
 	/**
 	 * Delete a group.
 	 *

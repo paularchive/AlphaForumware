@@ -83,6 +83,47 @@
 	#group_modal .group-cancel-btn:hover {
 		background-color:#e6e6e6;
 	}
+	#group_edit .modal-content{
+
+		border: 0;
+		border-radius: 0;
+	}
+	#group_edit .modal-body {
+		padding: 15px 15px 0;
+	}
+	#group_edit h3 {
+		margin: 0;
+		text-align: center;
+	}
+	#group_edit .group-edit-confirm-btn {
+		float: right;
+		text-decoration: none;
+		display: inline-block;
+		padding: 6px 12px;
+		text-align: center;
+		cursor: pointer;
+		border: 0;
+		color: #fff;
+		background-color: #337ab7;
+		width: 50%;
+	}
+	#group_edit .group-edit-confirm-btn:hover {
+		background-color:#286090;
+	}
+	#group_edit .group-edit-cancel-btn {
+		text-decoration: none;
+		display: inline-block;
+		padding: 6px 12px;
+		text-align: center;
+		cursor: pointer;
+		border: 0;
+		color: #333;
+		background-color: #fff;
+		width: 50%;
+	}
+	#group_edit .group-edit-cancel-btn:hover {
+		background-color:#e6e6e6;
+	}
 	#category_modal .modal-content{
 
 		border: 0;
@@ -148,7 +189,7 @@
 					<button id="options-menu" type="button" class="btn btn-default btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Options <span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu" aria-labelledby="options-menu">
 						<li><a href="#" data-toggle="modal" data-target="#category_modal" data-backdrop="false" data-function="new.category" data-id="{{ $group->id }}">New Category</a></li>
-						<li><a href="#" data-toggle="modal" data-target="#category_edit" data-backdrop="false" data-function="edit.category" data-id="{{ $group->id }}">Edit Category</a></li>
+						<li><a href="#" data-function="edit.group" data-id="{{ $group->id }}">Edit Group</a></li>
 						<li><a href="#" data-toggle="modal" data-target="#delete_modal" data-backdrop="false" data-function="delete.btn" data-id="{{ $group->id }}" data-what="group">Delete Group</a></li>
 					</ul>
 				</div>
@@ -184,6 +225,26 @@
 			</div>
 			<button type="button" class="group-cancel-btn" data-dismiss="modal">Cancel</button>
 			<button type="button" class="group-confirm-btn" id="category_submit">Add Group</button>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="group_edit" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-body">
+				
+				{{ Form::open() }}
+
+				    {{ Form::openGroup('group_name_edit', 'Group Name:') }}
+				        {{ Form::text('group_name_edit') }}
+				    {{ Form::closeGroup() }}
+
+				{{ Form::close() }}
+
+			</div>
+			<button type="button" class="group-edit-cancel-btn" data-dismiss="modal">Cancel</button>
+			<button type="button" class="group-edit-confirm-btn">Save Group</button>
 		</div>
 	</div>
 </div>
@@ -229,6 +290,13 @@
 	@if(Session::has('modal'))
 		<script type="text/javascript">
 			$('{{ Session::get('modal') }}').modal({'backdrop': false}, 'show');
+		</script>
+	@endif
+
+	@if(Session::has('group-edit') && Session::has('group-id'))
+		<script type="text/javascript">
+			$('#group_edit form').prop('action', "/forum/group/{{ Session::get('group-id') }}/edit");
+			$('{{ Session::get('group-edit') }}').modal({'backdrop': false}, 'show');
 		</script>
 	@endif
 
