@@ -3,37 +3,44 @@
 @section('head')
 	@parent
 	<title>Login</title>
+	<style type="text/css">
+	input[type=submit] {
+		width: 100%;
+	}
+	h1 {
+		text-align: center;
+	}
+	p {
+		text-align: center;
+	}
+	@media (min-width: 768px) {
+		.content {
+			width: 40%;
+			margin: 0 auto 0;
+		}
+		input[type=submit] {
+			width: 70%;
+		}
+	}
+	</style>
 @stop
 
 @section('content')
-	<div class="container">
+	<div class="content">
 		<h1>Login</h1>
 
-		<form role="form" method="post" action="{{ URL::route('postLogin') }}">
-			<div class="form-group{{ ($errors->has('username')) ? ' has-error' : '' }}">
-				<label for="username">Username: </label>
-				<input id="username" name="username" type="text" class="form-control">
-				@if($errors->has('username'))
-					{{ $errors->first('username') }}
-				@endif
-			</div>
-			<div class="form-group{{ ($errors->has('pass1')) ? ' has-error' : '' }}">
-				<label for="pass1">Password: </label>
-				<input id="pass1" name="pass1" type="password" class="form-control">
-				@if($errors->has('pass1'))
-					{{ $errors->first('pass1') }}
-				@endif
-			</div>
-			<div class="checkbox">
-				<label for="remember">
-					<input type="checkbox" name="remember" id="remember">
-					Remember me
-				</label>
-			</div>
-			{{ Form::token() }}
-			<div class="form-group">
-				<input type="submit" value="Login" class="btn btn-default">
-			</div>
-		</form>
+		{{ Form::open([ 'route' => 'postLogin' ]) }}
+
+		    {{ Form::openGroup('username', 'Username:') }}
+		        {{ Form::text('username') }}
+		    {{ Form::closeGroup() }}
+
+		    {{ Form::openGroup('pass1', 'Password:') }}
+		        {{ Form::password('pass1') }}
+		    {{ Form::closeGroup() }}
+
+		    <p>{{ Form::submit('Login', array('class' => 'btn btn-primary btn-lg')) }}<p>
+
+		{{ Form::close() }}
 	</div>
 @stop
