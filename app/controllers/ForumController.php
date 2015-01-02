@@ -61,7 +61,7 @@ class ForumController extends BaseController {
 		));
 
 		if($validate->fails())
-			return Redirect::route('forum-home')->withInput()->withErrors($validate)->with('modal', '#group_form');
+			return Redirect::route('forum-home')->withInput()->withErrors($validate)->with('modal', '#group_modal');
 		else
 		{
 			$group = new ForumGroup;

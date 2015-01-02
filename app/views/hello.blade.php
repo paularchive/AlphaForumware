@@ -2,7 +2,7 @@
 
 @section('head')
 	@parent
-	<title>Home Page</title>
+	<title>AlphaForumware :: Home</title>
 @stop
 
 @section('content')

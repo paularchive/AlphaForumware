@@ -3,6 +3,46 @@
 @section('head')
 	@parent
 	<title>Forum | {{ $category->title }}</title>
+		<style type="text/css">
+	#delete_modal .modal-content{
+
+		border: 0;
+		border-radius: 0;
+	}
+	#delete_modal h3 {
+		margin: 0;
+		text-align: center;
+	}
+	#delete_modal .delete-confirm-btn {
+		float: right;
+		text-decoration: none;
+		display: inline-block;
+		padding: 6px 12px;
+		text-align: center;
+		cursor: pointer;
+		border: 0;
+		color: #fff;
+		background-color: #d9534f;
+		width: 50%;
+	}
+	#delete_modal .delete-confirm-btn:hover {
+		background-color:#c9302c;
+	}
+	#delete_modal .delete-cancel-btn {
+		text-decoration: none;
+		display: inline-block;
+		padding: 6px 12px;
+		text-align: center;
+		cursor: pointer;
+		border: 0;
+		color: #333;
+		background-color: #fff;
+		width: 50%;
+	}
+	#delete_modal .delete-cancel-btn:hover {
+		background-color:#e6e6e6;
+	}
+	</style>
 @stop
 
 @section('content')
@@ -17,8 +57,13 @@
 		@if(Auth::check() && Auth::user()->isAdmin())
 		<div class="clearfix">
 			<h3 class="panel-title pull-left">{{ $category->title }}</h3>
-			<a href="{{ URL::route('forum-get-new-thread', $category->id) }}" class="label label-success pull-right">New Tread</a>
-			<a href="#" data-toggle="popover" data-id="{{ $category->id }}" data-what="category" class="label label-danger delete-btn pull-right">Delete</a>
+			<div class="dropdown pull-right">
+				<button id="options-menu" type="button" class="btn btn-default btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Options <span class="caret"></span></button>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="options-menu">
+					<li><a href="{{ URL::route('forum-get-new-thread', $category->id) }}">New Thread</a></li>
+					<li><a href="#" data-toggle="modal" data-target="#delete_modal" data-backdrop="false" data-function="delete.btn" data-id="{{ $category->id }}" data-what="category">Delete Category</a></li>
+				</ul>
+			</div>
 		</div>
 		@elseif(Auth::check())
 		<div class="clearfix">
@@ -37,23 +82,14 @@
 </div>
 
 @if(Auth::check() && Auth::user()->isAdmin())
-<div class="modal fade" id="category_delete" tabindex="-1" role="dialog" aria-hidden="true">
-	<div class="modal-dialog">
+<div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">
-					<span aria-hidden="true">&times;</span>
-					<span class="sr-only">Close</span>
-				</button>
-				<h4 class="modal-title">Delete Category</h4>
-			</div>
 			<div class="modal-body">
-				<h3>Are you shure you want to delete this category?</h3>
+				<h3>Are you shure?</h3>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				<a href="#" class="btn btn-primary" id="btn_delete_category">Delete</a>
-			</div>
+			<button class="delete-cancel-btn" type="button" data-dismiss="modal">Cancel</button>
+			<a class="delete-confirm-btn">Confirm</a>
 		</div>
 	</div>
 </div>
