@@ -3,7 +3,10 @@
 <head>
 	@section('head')
 	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="/css/style.css">
 	@show
 </head>
@@ -17,7 +20,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a href="{{ URL::route('home') }}" class="navbar-brand">Forum (Laravel 4.2)</a>
+				<a href="{{ URL::route('home') }}" class="navbar-brand">AlphaForumware</a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
@@ -29,7 +32,15 @@
 						<li{{ HTML::menu_active('user/create') }}><a href="{{ URL::route('getCreate') }}">Register</a></li>
 						<li{{ HTML::menu_active('user/login') }}><a href="{{ URL::route('getLogin') }}">Login</a></li>
 					@else
-						<li><a href="{{ URL::route('getLogout') }}">Logout</a></li>
+						<li class="dropdown">
+							<a href="#" data-toggle="dropdown"><i class="fa fa-user"></i></a>
+							<ul class="dropdown-menu">
+								<li class="dropdown-header">Welcome {{ Auth::user()->username }}</li>
+								<li><a href="#">User Profile</a></li>
+								<li class="divider"></li>
+								<li><a href="{{ URL::route('getLogout') }}">Logout</a></li>
+							</ul>
+						</li>
 					@endif
 				</ul>
 			</div>
