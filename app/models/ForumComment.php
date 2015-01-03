@@ -1,6 +1,6 @@
 <?php
 
-class ForumComment extends Eloquent
+class ForumComment extends BaseModel
 {
 	protected $table = 'forum_comments';
 

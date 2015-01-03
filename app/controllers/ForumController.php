@@ -379,4 +379,41 @@ class ForumController extends BaseController {
 		else
 			return Redirect::route('forum-thread', $threadid)->with('fail', "An error occured while deleting the comment!");
 	}
+
+	public function editComment($id)
+	{
+		$comment = ForumComment::find($id);
+		if($comment == null)
+				return Redirect::route('forum-home')->with('fail', 'The comment you are trying to edit does not exist!');
+		if(Auth::user()->id == $comment->author_id || Auth::user()->isAdmin())
+		{
+			if(Request::isMethod('get'))
+				return View::make('forum.editcomment')->with('comment', ForumComment::find($id));
+
+			elseif(Request::isMethod('post'))
+			{
+				$validate = Validator::make(Input::all(), array(
+					'body' => 'required|min:10|max:65000'
+				));
+
+				if($validate->fails())
+					return Redirect::route('forum-edit-comment', $id)->withInput()->withErrors($validate)->with('fail', 'Your input doesn\'t match the requirements.');
+				else
+				{
+					$comment->body = Input::get('body');
+
+					if($comment->save())
+					{
+						return Redirect::route('forum-thread', $comment->thread->id)->with('success', 'Your comment has been saved.');
+					}
+					else
+					{
+						return Redirect::route('forum-edit-comment', $id)->with('fail', 'An error occured while saving your comment.')->withInput();
+					}
+				}
+			}
+		}
+		else
+			return Redirect::route('forum-comment', $id)->with('fail', 'You do not own this comment! If you beleave this is a server error contact one of the Staff Members.');
+	}
 }

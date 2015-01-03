@@ -191,7 +191,8 @@ return array(
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
 
-		'BBCode' 			=> 'Golonka\BBCode\Facades\BBCodeParser'
+		'BBCode' 			=> 'Golonka\BBCode\Facades\BBCodeParser',
+		'Carbon'			=> 'Carbon\Carbon'
 
 	),
 
