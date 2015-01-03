@@ -2,10 +2,10 @@
 
 AlphaForumware is a forum application written in PHP. We use the Laravel PHP Framework and Bootstrap 3.3.1. It's possible to:
 * Register/Login
-* Create/Edit Forum Groups/Delete
-* Create/Edit Forum Categories in Groups/Delete
-* Create/Edit Threads in Categories
-* Create Comments in Threads(edit soon!)
+* Create/Edit/Delete Forum Groups
+* Create/Edit/Delete Forum Categories in Groups
+* Create/Edit/Delete Threads in Categories
+* Create/Delete Comments in Threads(edit soon!)
 * Backend coming soon!
 
 Dependencies
