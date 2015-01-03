@@ -1,6 +1,6 @@
 <?php
 
-class ForumCategory extends Eloquent
+class ForumCategory extends BaseModel
 {
 	protected $table = 'forum_categories';
 

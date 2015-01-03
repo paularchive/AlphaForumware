@@ -1,6 +1,6 @@
 <?php
 
-class ForumThread extends Eloquent
+class ForumThread extends BaseModel
 {
 	protected $table = 'forum_threads';
 
