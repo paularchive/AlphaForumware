@@ -87,7 +87,7 @@ class ForumController extends BaseController {
 		);
 
 		$messages = array(
-			'required' => 'Please fill in the group name',
+			'required' => 'Please fill in the group name!',
 			'unique' => 'That name has already been taken!'
 		);
 
@@ -106,7 +106,7 @@ class ForumController extends BaseController {
 			if($group->save())
 				return Redirect::route('forum-home')->with('success', 'The group is edited.');
 			else
-				return Redirect::route('forum-home')->with('fail', 'An error occured while saving the new group. Please try again.');
+				return Redirect::route('forum-home')->with('fail', 'An error occured while editing the group. Please try again.');
 		}
 	}
 
@@ -169,6 +169,42 @@ class ForumController extends BaseController {
 			else
 				return Redirect::route('forum-home')->with('fail', 'An error occured while saving the new category. Please try again.');		}
 	}
+
+	public function editCategory($id)
+	{
+		if(Request::ajax())
+		{
+			return Response::json(array('category' => ForumCategory::find($id)));
+		}
+
+		$rules = array(
+			'category_name_edit' => 'required|unique:forum_categories,title'
+		);
+
+		$messages = array(
+			'required' => 'Please fill in the category name!',
+			'unique' => 'That name has already been taken!'
+		);
+
+		$validate = Validator::make(Input::all(), $rules, $messages);
+
+		if($validate->fails())
+		{
+			return Redirect::route('forum-category', $id)->withInput()->withErrors($validate)->with('category-edit', '#category_edit')->with('category-id', $id);
+		}
+		else
+		{
+			$group = ForumCategory::find($id);
+			$group->title = Input::get('category_name_edit');
+			$group->author_id = Auth::user()->id;
+
+			if($group->save())
+				return Redirect::route('forum-category', $id)->with('success', 'The category is edited.');
+			else
+				return Redirect::route('forum-category', $id)->with('fail', 'An error occured while editing the category. Please try again.');
+		}
+	}
+
 
 	public function deleteCategory($id)
 	{
