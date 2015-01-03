@@ -233,28 +233,72 @@ class ForumController extends BaseController {
 		}
 	}
 
-	public function deleteThread()
+	public function editThread($id)
+	{
+		$thread = ForumThread::find($id);
+		if($thread == null)
+				return Redirect::route('forum-home')->with('fail', 'The thread you are trying to edit does not exist!');
+		if(Auth::user()->id == $thread->author_id || Auth::user()->isAdmin())
+		{
+			if(Request::isMethod('get'))
+				return View::make('forum.editthread')->with('thread', ForumThread::find($id));
+
+			elseif(Request::isMethod('post'))
+			{
+				$validate = Validator::make(Input::all(), array(
+					'title' => 'required|min:3|max:225',
+					'body' => 'required|min:10|max:65000'
+				));
+
+				if($validate->fails())
+					return Redirect::route('forum-edit-thread', $id)->withInput()->withErrors($validate)->with('fail', 'Your input doesn\'t match the requirements.');
+				else
+				{
+					$thread->title = Input::get('title');
+					$thread->body = Input::get('body');
+
+					if($thread->save())
+					{
+						return Redirect::route('forum-thread', $thread->id)->with('success', 'Your thread has been saved.');
+					}
+					else
+					{
+						return Redirect::route('forum-edit-thread', $id)->with('fail', 'An error occured while saving your thread.')->withInput();
+					}
+				}
+			}
+		}
+		else
+			return Redirect::route('forum-thread', $id)->with('fail', 'You do not own this thread! If you beleave this is a server error contact one of the Staff Members.');
+	}
+
+	public function deleteThread($id)
 	{
 		$thread = ForumThread::find($id);
 		if($thread == null)
 			Redirect::route('forum-home')->with('fail', "That thread doesn't exist");
 		
-		$category_id = $thread->category_id;
-		$comments = $thread->comments;
-		if($comments->count() > 0)
+		if(Auth::user()->id == $thread->author_id || Auth::user()->isAdmin())
 		{
-			if($comments->delete() && $thread->delete())
-				return Redirect::route('forum_category', $category_id)->with('success', "The thread has been deleted.");
+			$category_id = $thread->category_id;
+			$comments = $thread->comments;
+			if($comments->count() > 0)
+			{
+				if($comments->delete() && $thread->delete())
+					return Redirect::route('forum-category', $category_id)->with('success', "The thread has been deleted.");
+				else
+					return Redirect::route('forum-category', $category_id)->with('fail', "An error occured while deleting the thread.");
+			}
 			else
-				return Redirect::route('forum_category', $category_id)->with('fail', "An error occured while deleting the thread.");
+			{
+				if($thread->delete())
+					return Redirect::route('forum-category', $category_id)->with('success', "The thread has been deleted.");
+				else
+					return Redirect::route('forum-category', $category_id)->with('fail', "An error occured while deleting the thread.");
+			}
 		}
 		else
-		{
-			if($thread->delete())
-				return Redirect::route('forum_category', $category_id)->with('success', "The thread has been deleted.");
-			else
-				return Redirect::route('forum_category', $category_id)->with('fail', "An error occured while deleting the thread.");
-		}
+			return Redirect::route('forum-thread', $id)->with('fail', 'You do not own this thread! If you beleave this is a server error contact one of the Staff Members.');
 	}
 
 	public function storeComment($id)

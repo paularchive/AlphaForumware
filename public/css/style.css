@@ -21,3 +21,57 @@
 	opacity: 0.9;
 	z-index:100;
 }
+
+/*****************************************************
+ *                    Delete Modal                   *
+ *****************************************************/
+#delete_modal .modal-content{
+
+	border: 0;
+	border-radius: 0;
+}
+#delete_modal h3 {
+	margin: 0;
+	text-align: center;
+}
+#delete_modal .delete-confirm-btn {
+	float: right;
+	text-decoration: none;
+	display: inline-block;
+	padding: 6px 12px;
+	text-align: center;
+	cursor: pointer;
+	border: 0;
+	color: #fff;
+	background-color: #d9534f;
+	width: 50%;
+}
+#delete_modal .delete-confirm-btn:hover {
+	background-color:#c9302c;
+}
+#delete_modal .delete-cancel-btn {
+	text-decoration: none;
+	display: inline-block;
+	padding: 6px 12px;
+	text-align: center;
+	cursor: pointer;
+	border: 0;
+	color: #333;
+	background-color: #fff;
+	width: 50%;
+}
+#delete_modal .delete-cancel-btn:hover {
+	background-color:#e6e6e6;
+}
+#group_modal .modal-content{
+
+	border: 0;
+	border-radius: 0;
+}
+#group_modal .modal-body {
+	padding: 15px 15px 0;
+}
+#group_modal h3 {
+	margin: 0;
+	text-align: center;
+}

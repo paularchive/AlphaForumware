@@ -10,14 +10,20 @@
 		<li><a href="{{ URL::route('forum-home') }}">Forum</a></li>
 		<li><a href="{{ URL::route('forum-category', $thread->category_id) }}">{{ $thread->category->title }}</a></li>
 		<li class="active">{{ $thread->title }}</li>
+		@if(Auth::check() && Auth::user()->isAdmin() || Auth::check() && Auth::user()->id == $thread->author_id)
+			<div class="dropdown pull-right">
+				<button id="options-menu" type="button" class="btn btn-default btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Options <span class="caret"></span></button>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="options-menu">
+					<li><a href="{{ URL::route('forum-edit-thread', $thread->id) }}">Edit Thread</a></li>
+					<li><a href="#" data-toggle="modal" data-target="#delete_modal" data-backdrop="false">Delete Thread</a></li>
+				</ul>
+			</div>
+		@endif
 	</ol>
 
 	<div class="panel panel-default">
-		<div class="panel-heading clearfix">
-			<h4 class="pull-left">{{ $thread->title }}<br><small>by: {{ $author }} on {{ $thread->created_at }}</small></h4>
-			@if(Auth::check() && Auth::user()->isAdmin)
-				<a href="{{ URL::route('forum-delete-thread', $thread->id) }}" class="btn btn-danger pull-right">Delete</a>
-			@endif
+		<div class="panel-heading">
+			<h4>{{ $thread->title }}<br><small>by: {{ $author }} on {{ $thread->created_at }}</small></h4>
 		</div>
 		<div class="panel-body">
 			{{ BBCode::parse($thread->body) }}
@@ -49,5 +55,19 @@
 				<input type="submit" class="btn btn-primary" value="Submit Comment">
 			</div>
 		</form>
+	@endif
+
+	@if(Auth::check() && Auth::user()->isAdmin() || Auth::check() && Auth::user()->id == $thread->id)
+	<div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h3>Are you shure?</h3>
+				</div>
+				<button class="delete-cancel-btn" type="button" data-dismiss="modal">Cancel</button>
+				<a href="{{ URL::route('forum-delete-thread', $thread->id) }}" class="delete-confirm-btn">Confirm</a>
+			</div>
+		</div>
+	</div>
 	@endif
 @stop

@@ -23,7 +23,6 @@ Route::group(array('prefix' => 'forum'), function()
 	{
 		Route::get('/group/{id}/delete', array('uses' => 'ForumController@deleteGroup', 'as' => 'forum-delete-group'));
 		Route::get('/category/{id}/delete', array('uses' => 'ForumController@deleteCategory', 'as' => 'forum-delete-category'));
-		Route::get('/thread/{id}/delete', array('uses' => 'ForumController@deleteThread', 'as' => 'forum-delete-thread'));
 		Route::get('/comment/{id}/delete', array('uses' => 'ForumController@deleteComment', 'as' => 'forum-delete-comment'));
 		Route::get('/group/{id}/edit', array('uses' => 'ForumController@editGroup', 'as' => 'forum-edit-group'));
 
@@ -37,10 +36,13 @@ Route::group(array('prefix' => 'forum'), function()
 	Route::group(array('before' => 'auth'), function()
 	{
 		Route::get('/thread/{id}/new', array('uses' => 'ForumController@newThread', 'as' => 'forum-get-new-thread'));
+		Route::get('/thread/{id}/edit', array('uses' => 'ForumController@editThread', 'as' => 'forum-edit-thread'));
+		Route::get('/thread/{id}/delete', array('uses' => 'ForumController@deleteThread', 'as' => 'forum-delete-thread'));
 	
 		Route::group(array('before' => 'csrf'), function()
 		{
 			Route::post('/thread/{id}/new', array('uses' => 'ForumController@storeThread', 'as' => 'forum-store-thread'));
+			Route::post('/thread/{id}/edit', array('uses' => 'ForumController@editThread', 'as' => 'forum-edit-thread'));
 			Route::post('/comment/{id}/new', array('uses' => 'ForumController@storeComment', 'as' => 'forum-store-comment'));
 		});
 	});

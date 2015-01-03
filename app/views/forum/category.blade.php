@@ -3,46 +3,6 @@
 @section('head')
 	@parent
 	<title>Forum | {{ $category->title }}</title>
-		<style type="text/css">
-	#delete_modal .modal-content{
-
-		border: 0;
-		border-radius: 0;
-	}
-	#delete_modal h3 {
-		margin: 0;
-		text-align: center;
-	}
-	#delete_modal .delete-confirm-btn {
-		float: right;
-		text-decoration: none;
-		display: inline-block;
-		padding: 6px 12px;
-		text-align: center;
-		cursor: pointer;
-		border: 0;
-		color: #fff;
-		background-color: #d9534f;
-		width: 50%;
-	}
-	#delete_modal .delete-confirm-btn:hover {
-		background-color:#c9302c;
-	}
-	#delete_modal .delete-cancel-btn {
-		text-decoration: none;
-		display: inline-block;
-		padding: 6px 12px;
-		text-align: center;
-		cursor: pointer;
-		border: 0;
-		color: #333;
-		background-color: #fff;
-		width: 50%;
-	}
-	#delete_modal .delete-cancel-btn:hover {
-		background-color:#e6e6e6;
-	}
-	</style>
 @stop
 
 @section('content')
