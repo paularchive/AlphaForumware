@@ -4,9 +4,9 @@ class BaseModel extends Eloquent {
 
     public function getCreatedAtAttribute($attr)
     {        
-        return Carbon::parse($attr)->format('D jS \\of F Y h:i A'); //Change the format to whichever you desire
+        return Carbon::parse($attr)->format('D M d, Y h:i A');
     }
     public function getUpdatedAtAttribute($attr) {        
-        return Carbon::parse($attr)->format('D jS \\of F Y h:i A'); //Change the format to whichever you desire
+        return Carbon::parse($attr)->format('D M d, Y h:i A');
     }
 }
