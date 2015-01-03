@@ -37,8 +37,14 @@
 		<div class="panel panel-default">
 			<div class="panel-heading clearfix">
 				<h4 class="pull-left">Re: {{ $comment->thread->title }}<br><small>by <strong>{{ $comment->author->username }}</strong> &raquo; <em>{{ date("d F Y",strtotime($comment->created_at)) }} at {{ date("g:ha",strtotime($comment->created_at)) }}</em></small></h4>
-				@if(Auth::check() && Auth::user()->isAdmin())
-					<a href="{{ URL::route('forum-delete-comment', $comment->id) }}" class="btn btn-danger pull-right">Delete</a>
+				@if(Auth::check() && Auth::user()->isAdmin() || Auth::check() && Auth::user()->id == $thread->author_id)
+					<div class="dropdown pull-right">
+						<button id="options-menu" type="button" class="btn btn-default btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Options <span class="caret"></span></button>
+						<ul class="dropdown-menu" role="menu" aria-labelledby="options-menu">
+							<li><a href="{{ URL::route('forum-edit-comment', $comment->id) }}">Edit Comment</a></li>
+							<li><a href="{{ URL::route('forum-delete-comment', $comment->id) }}">Delete Comment</a></li>
+						</ul>
+					</div>
 				@endif
 			</div>
 			<div class="panel-body">
