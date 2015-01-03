@@ -1,6 +1,6 @@
 <?php
 
-class ForumGroup extends BaseModal
+class ForumGroup extends BaseModel
 {
 	protected $table = 'forum_groups';
 
