@@ -23,12 +23,12 @@
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h4>{{ $thread->title }}<br><small>by <strong>{{ $author }}</strong> &raquo; <em>{{ date("d F Y",strtotime($thread->created_at)) }} at {{ date("g:ha",strtotime($thread->created_at)) }}</em></small></h4>
+			<h4>{{ $thread->title }}<br><small>by <strong>{{ $author }}</strong> &raquo; <em>{{ $thread->created_at->format('D jS \\of F Y h:i A') }}</em></small></h4>
 		</div>
 		<div class="panel-body">
 			{{ BBCode::parse($thread->body) }}
 			@if($thread->updated_at != $thread->created_at)
-			<br><small>Last edited by <strong>{{ $author }}</strong> on <em>{{ date("d F Y",strtotime($thread->updated_at)) }} at {{ date("g:ha",strtotime($thread->updated_at)) }}</em></small>
+			<br><small>Last edited by <strong>{{ $author }}</strong> on <em>{{ $thread->updated_at->format('D jS \\of F Y h:i A') }}</em></small>
 			@endif
 		</div>
 	</div>
@@ -36,7 +36,7 @@
 	@foreach($thread->comments()->get() as $comment)
 		<div class="panel panel-default">
 			<div class="panel-heading clearfix">
-				<h4 class="pull-left">Re: {{ $comment->thread->title }}<br><small>by <strong>{{ $comment->author->username }}</strong> &raquo; <em>{{ date("d F Y",strtotime($comment->created_at)) }} at {{ date("g:ha",strtotime($comment->created_at)) }}</em></small></h4>
+				<h4 class="pull-left">Re: {{ $comment->thread->title }}<br><small>by <strong>{{ $comment->author->username }}</strong> &raquo; <em>{{ $comment->created_at->format('D jS \\of F Y h:i A') }}</em></small></h4>
 				@if(Auth::check() && Auth::user()->isAdmin() || Auth::check() && Auth::user()->id == $thread->author_id)
 					<div class="dropdown pull-right">
 						<button id="options-menu" type="button" class="btn btn-default btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Options <span class="caret"></span></button>
@@ -50,7 +50,7 @@
 			<div class="panel-body">
 				{{ BBCode::parse($comment->body) }}
 				@if($comment->updated_at != $comment->created_at)
-				<br><small>Last edited by <strong>{{ $comment->author->username }}</strong> on <em>{{ date("d F Y",strtotime($comment->updated_at)) }} at {{ date("g:ha",strtotime($comment->updated_at)) }}</em></small>
+				<br><small>Last edited by <strong>{{ $comment->author->username }}</strong> on <em>{{ $comment->updated_at->format('D jS \\of F Y h:i A') }}</em></small>
 				@endif
 			</div>
 		</div>
