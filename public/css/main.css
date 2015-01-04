@@ -13,3 +13,10 @@
 	line-height: 1.33;
 	color: rgba(0, 0, 0, 0.8);
 }
+.thread-title {
+	padding: 0.75rem 1rem!important;
+}
+.thread-title h4 {
+	margin-top: 0;
+	margin-bottom: 0;
+}
