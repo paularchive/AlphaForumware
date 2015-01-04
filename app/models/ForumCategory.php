@@ -6,7 +6,7 @@ class ForumCategory extends BaseModel
 
 	public function group()
 	{
-		$this->belongsTo('ForumGroup');
+		return $this->belongsTo('ForumGroup');
 	}
 
 	public function threads()

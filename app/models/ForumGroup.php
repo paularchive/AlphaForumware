@@ -18,4 +18,9 @@ class ForumGroup extends BaseModel
 	{
 		return $this->hasMany('ForumComment', 'group_id');
 	}
+
+	public function author()
+	{
+		return $this->belongsTo('User');
+	}
 }

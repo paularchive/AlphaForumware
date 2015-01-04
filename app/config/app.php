@@ -106,8 +106,8 @@ return array(
 		'Illuminate\Encryption\EncryptionServiceProvider',
 		'Illuminate\Filesystem\FilesystemServiceProvider',
 		'Illuminate\Hashing\HashServiceProvider',
-		//'Illuminate\Html\HtmlServiceProvider',
-		'Manavo\BootstrapForms\BootstrapFormsServiceProvider', //This is for the bootstrap forms
+		'Illuminate\Html\HtmlServiceProvider',
+		//'Manavo\BootstrapForms\BootstrapFormsServiceProvider', //This is for the bootstrap forms
 		'Illuminate\Log\LogServiceProvider',
 		'Illuminate\Mail\MailServiceProvider',
 		'Illuminate\Database\MigrationServiceProvider',

@@ -4,6 +4,9 @@
 	@parent
 	<title>Login</title>
 	<style type="text/css">
+	.ui.grid > [class*="two column"].row > .column {
+		width: 100% !important;
+	}
 	input[type=submit] {
 		width: 100%;
 	}
@@ -14,9 +17,8 @@
 		text-align: center;
 	}
 	@media (min-width: 768px) {
-		.content {
-			width: 40%;
-			margin: 0 auto 0;
+		.ui.grid > [class*="two column"].row > .column {
+			width: 50% !important;
 		}
 		input[type=submit] {
 			width: 70%;
@@ -26,21 +28,38 @@
 @stop
 
 @section('content')
-	<div class="content">
-		<h1>Login</h1>
+	<div class="ui two column centered row">
+		<div class="ui column form{{ ($errors->has()) ? ' error' : '' }}">
+			<h1>Log In</h1>
 
-		{{ Form::open([ 'route' => 'postLogin' ]) }}
+			@if($errors->has())
+				<div class="ui error message">
+					<div class="header">There where some errors while submitting your information</div>
+					
+					<ul class="list">
+					@foreach($errors->all() as $error)
+						<li>{{ $error }}</li>
+					@endforeach
+					</ul>
+				</div>
+			@endif
 
-		    {{ Form::openGroup('username', 'Username:') }}
-		        {{ Form::text('username') }}
-		    {{ Form::closeGroup() }}
+			{{ Form::open([ 'route' => 'postLogin' ]) }}
 
-		    {{ Form::openGroup('pass1', 'Password:') }}
-		        {{ Form::password('pass1') }}
-		    {{ Form::closeGroup() }}
+				<div class="field{{ ($errors->has('username')) ? ' error' : '' }}">
+					<label for="username">Username: </label>
+					{{ Form::text('username', null, array('placeholder' => 'AwesomeUsername55' )) }}
+				</div>
 
-		    <p>{{ Form::submit('Login', array('class' => 'btn btn-primary btn-lg')) }}<p>
+				<div class="field{{ ($errors->has('pass1')) ? ' error' : '' }}">
+					<label for="pass1">Password: </label>
+					{{ Form::password('pass1') }}
+				</div>
 
-		{{ Form::close() }}
+			    <p>{{ Form::submit('Log In', array('class' => 'ui button blue')) }}</p>
+
+			{{ Form::close() }}
+
+		</div>
 	</div>
 @stop

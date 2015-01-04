@@ -1,0 +1,15 @@
+.ui.static.menu {
+	border-radius: 0;
+}
+
+.ui.inverted.blue.attached.segment {
+	border-color: #3b83c0;
+}
+
+.ui.items > .item > .content > .description {
+	margin-top: 0;
+	max-width: auto;
+	font-size: 1em;
+	line-height: 1.33;
+	color: rgba(0, 0, 0, 0.8);
+}
