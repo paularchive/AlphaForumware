@@ -2,6 +2,7 @@
 
 #####What is new in v2.0?
 version 2.0 will no longer include bootstrap but Semantic UI
+
 I DO NOT RECOMMENT THIS BUILD JUST JET!
 
 AlphaForumware is a forum application written in PHP. We use the Laravel PHP Framework and Semantic UI. It's possible to:
