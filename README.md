@@ -4,6 +4,11 @@
 version 2.0 will no longer include bootstrap but Semantic UI
 
 I DO NOT RECOMMENT THIS BUILD JUST JET!
+#####Todo befor a stable release
+* Change all id links to slugs (almost done, required a database reset)
+* Let the edit modals/popups work again.
+* Finish up the style some more.
+* Clean up routes.php (It's all messed up atm!)
 
 AlphaForumware is a forum application written in PHP. We use the Laravel PHP Framework and Semantic UI. It's possible to:
 * Register/Login
