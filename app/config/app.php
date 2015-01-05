@@ -123,7 +123,8 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		
-		'Golonka\BBCode\BBCodeParserServiceProvider'
+		'Golonka\BBCode\BBCodeParserServiceProvider',
+		'Cviebrock\EloquentSluggable\SluggableServiceProvider',
 	),
 
 	/*

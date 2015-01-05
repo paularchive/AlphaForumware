@@ -16,6 +16,7 @@ class CreateForumSubCategoriesTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('title');
+			$table->string('slug')->nullable();
 			$table->integer('group_id');
 			$table->integer('author_id');
 			$table->timestamps();

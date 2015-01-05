@@ -11,7 +11,7 @@
 	<div class="ui breadcrumb segment" style="width: 100%;">
 		<a href="{{ URL::route('forum-home') }}" class="section">Forum</a>
 		<i class="right chevron icon divider"></i>
-		<a href="{{ URL::route('forum-category', $subcategory->group_id) }}" class="section">{{ $subcategory->category->title }}</a>
+		<a href="{{ URL::route('forum-category', $subcategory->category->slug) }}" class="section">{{ $subcategory->category->title }}</a>
 		<i class="right chevron icon divider"></i>
 		<div class="active section">{{ $subcategory->title }}</div>
 	</div>
@@ -19,7 +19,7 @@
 
 @if(Auth::check())
 <div class="sixteen wide column">
-	<a href="{{ URL::route('forum-get-new-thread', $subcategory->id) }}" class="ui fade animated orange button">
+	<a href="{{ URL::route('forum-get-new-thread', $subcategory->slug) }}" class="ui fade animated orange button">
 		<div class="visible content">Post a new topic</div>
 		<div class="hidden content">
 			<i class="right arrow icon"></i>
@@ -34,7 +34,7 @@
 	</div>
 	<div class="ui link divided items attached segment">
 	@foreach($threads as $thread)
-		<a href="{{ URL::route('forum-thread', $thread->id) }}" class="item">
+		<a href="{{ URL::route('forum-thread', $thread->slug) }}" class="item">
 			<!--div class="ui tiny image">
 					<img src="topic.jpg">
 			</div-->

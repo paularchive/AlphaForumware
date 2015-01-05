@@ -2,7 +2,7 @@
 
 @section('head')
 	@parent
-	<title>New Topic</title>
+	<title>Post a reply</title>
 @stop
 
 @section('content')
@@ -10,16 +10,18 @@
 	<div class="ui breadcrumb segment" style="width: 100%;">
 		<a href="{{ URL::route('forum-home') }}" class="section">Forum</a>
 		<i class="right chevron icon divider"></i>
-		<a href="{{ URL::route('forum-category', $subcategory->category->slug) }}" class="section">{{ $subcategory->category->title }}</a>
+		<a href="{{ URL::route('forum-category', $topic->category->slug) }}" class="section">{{ $topic->category->title }}</a>
 		<i class="right chevron icon divider"></i>
-		<a href="{{ URL::route('forum-sub-category', $subcategory->slug) }}" class="section">{{ $subcategory->title }}</a>
+		<a href="{{ URL::route('forum-sub-category', $topic->subcategory->slug) }}" class="section">{{ $topic->subcategory->title }}</a>
 		<i class="right chevron icon divider"></i>
-		<div class="active section">New Topic</div>
+		<a href="{{ URL::route('forum-thread', $topic->slug) }}" class="section">{{ $topic->title }}</a>
+		<i class="right chevron icon divider"></i>
+		<div class="active section">New Reply</div>
 	</div>
 </div>
 	<div class="sixteen wide column">
 		<div class="ui column form{{ ($errors->has()) ? ' error' : '' }}">
-			<h1>New Topic</h1>
+			<h1>Post a reply to: <small>{{ $topic->title }} </small></h1>
 
 			@if($errors->has())
 				<div class="ui error message">
@@ -33,11 +35,11 @@
 				</div>
 			@endif
 
-			{{ Form::open(array('route' => array('forum-store-thread', $subcategory->slug), 'id' => 'postform')) }}
+			{{ Form::open(array('route' => array('forum-store-comment', $topic->slug), 'id' => 'postform')) }}
 
 				<div class="field{{ ($errors->has('title')) ? ' error' : '' }}">
 					<label for="username">Subject: </label>
-					{{ Form::text('title') }}
+					{{ Form::text('title', 'Re: '.$topic->title) }}
 				</div>
 
 				<div class="btn-toolbar" style="margin-bottom: 5px;">
@@ -86,7 +88,7 @@
 					{{ Form::textarea('body', null, array('rows' => '5')) }}
 				</div>
 
-			    <p>{{ Form::submit('Post Topic', array('class' => 'ui button green')) }}</p>
+			    <p>{{ Form::submit('Post Reply', array('class' => 'ui button teal')) }}</p>
 
 			{{ Form::close() }}
 

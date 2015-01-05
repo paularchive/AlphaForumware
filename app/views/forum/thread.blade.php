@@ -10,9 +10,9 @@
 	<div class="ui breadcrumb segment" style="width: 100%;">
 		<a href="{{ URL::route('forum-home') }}" class="section">Forum</a>
 		<i class="right chevron icon divider"></i>
-		<a href="{{ URL::route('forum-category', $thread->group_id) }}" class="section">{{ $thread->category->title }}</a>
+		<a href="{{ URL::route('forum-category', $thread->category->slug) }}" class="section">{{ $thread->category->title }}</a>
 		<i class="right chevron icon divider"></i>
-		<a href="{{ URL::route('forum-sub-category', $thread->category->id) }}" class="section">{{ $thread->subcategory->title }}</a>
+		<a href="{{ URL::route('forum-sub-category', $thread->subcategory->slug) }}" class="section">{{ $thread->subcategory->title }}</a>
 		<i class="right chevron icon divider"></i>
 		<div class="active section">{{ $thread->title }}</div>
 	</div>
@@ -21,9 +21,9 @@
 @if(Auth::check())
 <div class="row">
 	<div class="eight wide column">
-		<a href="#" class="ui vertical animated teal button">
-			<div class="hidden content">Reply</div>
-			<div class="visible content">
+		<a href="{{ URL::route('forum-new-comment', $thread->slug) }}" class="ui vertical animated teal button">
+			<div class="visible content">Reply</div>
+			<div class="hidden content">
 				<i class="reply icon"></i>
 			</div>
 		</a>
@@ -31,7 +31,7 @@
 	@if(Auth::user()->isAdmin() || Auth::user()->id == $thread->author_id)
 	<div class="right aligned eight wide column">
 		<div class="ui buttons">
-			<a href="{{ URL::route('forum-edit-thread', $thread->id) }}" class="ui button">Edit</a>
+			<a href="{{ URL::route('forum-edit-thread', $thread->slug) }}" class="ui button">Edit</a>
 			<div class="or"></div>
 			<div class="ui negative button">Delete</div>
 		</div>
@@ -83,25 +83,23 @@
 	</div>
 	<div class="ui attached segment">
 		<p>{{ BBCode::parse($comment->body) }}</p>
-		@if($comment->updated_at != $comment->comment)
+		@if($comment->updated_at != $comment->created_at)
 		<div class="ui bottom left attached label">Last edited by {{ $comment->author->username }} on <em>{{ $comment->updated_at }}</em></div>
 		@endif
 	</div>
 </div>
 @endforeach
 
-	@if(Auth::check())
-		<form method="post" action="{{ URL::route('forum-store-comment', $thread->id) }}">
-			<div class="form-group">
-				<label for="body">Comment: </label>
-				<textarea class="form-control" name="body" id="body"></textarea>
-			</div>
-			{{ Form::token() }}
-			<div class="form-group">
-				<input type="submit" class="btn btn-primary" value="Submit Comment">
-			</div>
-		</form>
-	@endif
+@if(Auth::check())
+<div class="sixteen wide column">
+	<a href="{{ URL::route('forum-new-comment', $thread->id) }}" class="ui vertical animated teal button">
+		<div class="visible content">Reply</div>
+		<div class="hidden content">
+			<i class="reply icon"></i>
+		</div>
+	</a>
+</div>
+@endif
 
 	@if(Auth::check() && Auth::user()->isAdmin() || Auth::check() && Auth::user()->id == $thread->id)
 	<div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -111,7 +109,7 @@
 					<h3>Are you shure?</h3>
 				</div>
 				<button class="delete-cancel-btn" type="button" data-dismiss="modal">Cancel</button>
-				<a href="{{ URL::route('forum-delete-thread', $thread->id) }}" class="delete-confirm-btn">Confirm</a>
+				<a href="{{ URL::route('forum-delete-thread', $thread->slug) }}" class="delete-confirm-btn">Confirm</a>
 			</div>
 		</div>
 	</div>

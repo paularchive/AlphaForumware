@@ -27,7 +27,7 @@
 	</div>
 	<div class="ui link divided items attached segment">
 	@foreach($subcategories as $subcategory)
-		<a href="{{ URL::route('forum-sub-category', $subcategory->id) }}" class="item">
+		<a href="{{ URL::route('forum-sub-category', $subcategory->slug) }}" class="item">
 			<div class="content">
 				<div class="header">{{ $subcategory->title }}</div>
 				<div class="description">

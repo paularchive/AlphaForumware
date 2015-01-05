@@ -15,19 +15,19 @@
 
 @if(Auth::check() && Auth::user()->isAdmin())
 	<div class="sixteen wide column">
-		<a href="#" class="ui purple button">Add category</a>
+		<div data-func="modal" data-target="#newcat" class="ui purple button">Add category</div>
 	</div>
 @endif
 
 <div class="sixteen wide column">
 @foreach($categories as $category)
 	<div class="ui blue inverted top attached segment">
-		<a href="{{ URL::route('forum-category', $category->id) }}">{{ $category->title }}</a>
+		<a href="{{ URL::route('forum-category', $category->slug) }}">{{ $category->title }}</a>
 	</div>
 	<div class="ui link divided items attached segment">
 	@foreach($subcategories as $subcategory)
 		@if($subcategory->group_id == $category->id)
-		<a href="{{ URL::route('forum-sub-category', $subcategory->id) }}" class="item">
+		<a href="{{ URL::route('forum-sub-category', $subcategory->slug) }}" class="item">
 			<!--div class="ui tiny image">
 					<img src="topic.jpg">
 			</div-->
@@ -45,9 +45,49 @@
 </div>
 @stop
 
+@if(Auth::check() && Auth::user()->isAdmin())
+<div class="ui modal" id="newcat">
+	<i class="close icon"></i>
+	<div class="header">
+		Modal Title
+	</div>
+	<div class="content">
+		<div class="image">
+		An image can appear on left or an icon
+		</div>
+		<div class="description">
+		A description can appear on the right
+		</div>
+	</div>
+	<div class="actions">
+		<div class="ui button">Cancel</div>
+		<div class="ui button">OK</div>
+	</div>
+</div>
+@endif
+
 @section('javascript')
 	@parent
 	<script type="text/javascript" src="/js/app.js"></script>
+	<script type="text/javascript">
+	$('[data-func]').each(function() {
+		var func= $(this).attr('data-func');
+		var target = $(this).attr('data-target');
+		if(func == 'modal') {
+			$(this).popup({
+    			title   : 'Popup Title',
+    			html 	: 	'{{ Form::open([ 'route' => 'forum-store-group', 'class' => 'ui form' ]) }}'+
+    						'<div class="field">'+
+							'<label for="category">Category name: </label>'+
+							'{{ Form::text('group_name') }}'+
+							'</div>'+
+							'{{ Form::submit('Submit', array('class' => 'ui button small')) }}'+
+    						'</form>',
+    			on		: 'click'
+  			});
+		}
+	});
+	</script>
 	@if(Session::has('modal'))
 		<script type="text/javascript">
 			$('{{ Session::get('modal') }}').modal({'backdrop': false}, 'show');

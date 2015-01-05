@@ -1,12 +1,22 @@
 <?php
 
-class ForumThread extends BaseModel
+use Cviebrock\EloquentSluggable\SluggableInterface;
+use Cviebrock\EloquentSluggable\SluggableTrait;
+
+class ForumThread extends BaseModel implements SluggableInterface
 {
+	use SluggableTrait;
+
+    protected $sluggable = array(
+        'build_from' => 'title',
+        'save_to'    => 'slug',
+    );
+
 	protected $table = 'forum_threads';
 
 	public function category()
 	{
-		return $this->belongsTo('ForumCategory');
+		return $this->belongsTo('ForumCategory', 'group_id');
 	}
 
 	public function subcategory()

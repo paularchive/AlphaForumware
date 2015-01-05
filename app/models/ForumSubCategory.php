@@ -1,7 +1,17 @@
 <?php
 
+use Cviebrock\EloquentSluggable\SluggableInterface;
+use Cviebrock\EloquentSluggable\SluggableTrait;
+
 class ForumSubCategory extends BaseModel
 {
+	use SluggableTrait;
+
+    protected $sluggable = array(
+        'build_from' => 'title',
+        'save_to'    => 'slug',
+    );
+
 	protected $table = 'forum_subcategories';
 
 	public function category()

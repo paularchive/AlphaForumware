@@ -10,9 +10,9 @@
 	<div class="ui breadcrumb segment" style="width: 100%;">
 		<a href="{{ URL::route('forum-home') }}" class="section">Forum</a>
 		<i class="right chevron icon divider"></i>
-		<a href="{{ URL::route('forum-category', $thread->group_id) }}" class="section">{{ $thread->category->title }}</a>
+		<a href="{{ URL::route('forum-category', $thread->category->slug) }}" class="section">{{ $thread->category->title }}</a>
 		<i class="right chevron icon divider"></i>
-		<a href="{{ URL::route('forum-sub-category', $thread->category_id) }}" class="section">{{ $thread->subcategory->title }}</a>
+		<a href="{{ URL::route('forum-sub-category', $thread->subcategory->slug) }}" class="section">{{ $thread->subcategory->title }}</a>
 		<i class="right chevron icon divider"></i>
 		<div class="active section">Edit &raquo; {{ $thread->title }}</div>
 	</div>
@@ -33,7 +33,7 @@
 			</div>
 		@endif
 
-		{{ Form::model($thread, array('route' => array('forum-edit-thread', $thread->id), 'id' => 'postform')) }}    
+		{{ Form::model($thread, array('route' => array('forum-edit-thread', $thread->slug), 'id' => 'postform')) }}    
 
 			<div class="field{{ ($errors->has('title')) ? ' error' : '' }}">
 				<label for="username">Subject: </label>
