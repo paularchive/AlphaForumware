@@ -17,6 +17,7 @@
 	</div>
 </div>
 
+@if(Auth::check())
 <div class="sixteen wide column">
 	<a href="{{ URL::route('forum-get-new-thread', $category->id) }}" class="ui fade animated orange button">
 		<div class="visible content">Post a new topic</div>
@@ -25,6 +26,7 @@
 		</div>
 	</a>
 </div>
+@endif
 
 <div class="sixteen wide column">
 	<div class="ui blue inverted top attached segment">

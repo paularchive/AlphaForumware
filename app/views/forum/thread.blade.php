@@ -53,10 +53,24 @@
 </div>
 
 @foreach($thread->comments()->get() as $comment)
-<div class="sixteen wide column">
+<div class="sixteen wide column" id="thread-comment">
 	<div class="ui top attached segment thread-title">
-		<h4>Re: {{ $comment->thread->title }}</h4><small>by <strong>{{ $comment->author->username }}</strong> &raquo; <em>{{ $comment->created_at }}</em></small>
-		@if(Auth::check() && Auth::user()->isAdmin() || Auth::check() && Auth::user()->id == $thread->author_id)
+		<div class="eight column row">
+			<div class="left floated column">
+			<h4>Re: {{ $comment->thread->title }}</h4><small>by <strong>{{ $comment->author->username }}</strong> &raquo; <em>{{ $comment->created_at }}</em></small>
+			</div>
+			@if(Auth::check() && Auth::user()->isAdmin() || Auth::check() && Auth::user()->id == $thread->author_id)
+			<div class="right floated column">
+				<div class="ui dropdown" data-trigger="click">
+					<span id="dropdown-toggle" style="opacity:0.5">
+						<i class="fa fa-bars"></i>
+					</span>
+					<div class="menu">
+						<a href="{{ URL::route('forum-edit-comment', $comment->id) }}" class="item">Edit</a>
+						<a href="{{ URL::route('forum-delete-comment', $comment->id) }}" class="item">Delete</a>
+					</div>
+				</div>
+			</div>
 			<!--div class="dropdown pull-right">
 				<button id="options-menu" type="button" class="btn btn-default btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Options <span class="caret"></span></button>
 				<ul class="dropdown-menu" role="menu" aria-labelledby="options-menu">
@@ -64,7 +78,8 @@
 					<li><a href="{{ URL::route('forum-delete-comment', $comment->id) }}">Delete Comment</a></li>
 				</ul>
 			</div-->
-		@endif
+			@endif
+		</div>
 	</div>
 	<div class="ui attached segment">
 		<p>{{ BBCode::parse($comment->body) }}</p>
@@ -101,4 +116,17 @@
 		</div>
 	</div>
 	@endif
+@stop
+
+@section('javascript')
+	@parent
+	<script type="text/javascript">
+	$('#thread-comment').each(function() {
+		$(this).hover(function() {
+			$(this).find('.ui.dropdown #dropdown-toggle').animate({opacity: '1'});
+		}, function() {
+			$(this).find('.ui.dropdown #dropdown-toggle').animate({opacity: '0.5'});
+		});
+	});
+	</script>
 @stop
