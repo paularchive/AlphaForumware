@@ -3,7 +3,7 @@
 use Cviebrock\EloquentSluggable\SluggableInterface;
 use Cviebrock\EloquentSluggable\SluggableTrait;
 
-class ForumSubCategory extends BaseModel
+class ForumSubCategory extends BaseModel implements SluggableInterface
 {
 	use SluggableTrait;
 

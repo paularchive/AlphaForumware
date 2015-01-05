@@ -17,7 +17,7 @@
 
 @if(Auth::check())
 <div class="sixteen wide column">
-	<a href="#" class="ui purple button">Add subcategory</a>
+	<div data-func="addsubcategory" class="ui purple button">Add subcategory</div>
 </div>
 @endif
 
@@ -44,6 +44,31 @@
 @section('javascript')
 	@parent
 	<script type="text/javascript" src="/js/app.js"></script>
+	<script type="text/javascript">
+	$('[data-func="addsubcategory"]').each(function() {
+		$(this).popup({
+			html 	: 	'{{ Form::open([ 'route' => array('forum-store-category', $category->slug), 'class' => 'ui form' ]) }}'+
+							'<div class="field{{ ($errors->has('category_name')) ? ' error' : '' }}">'+
+								'<div class="ui action input">'+
+									'{{ Form::text('category_name', null, array('placeholder' => 'Subcategory Name' )) }}'+
+									'<div class="ui button" onclick="$(this).parent().parent().parent().submit()">Add</div>'+
+								'</div>'+
+							@if($errors->has('category_name'))
+								'<div class="ui pointing label">{{ $errors->first('category_name') }}</div>'+
+							'</div>'+
+							@else
+							'</div>'+
+							@endif
+						'</form>',
+			on		: 'click',
+			position: 'right center'
+		});
+
+		@if(Session::has('adderror'))
+		$(this).popup('show');
+		@endif
+	});
+	</script>
 
 	@if(Session::has('category-edit') && Session::has('category-id'))
 		<script type="text/javascript">

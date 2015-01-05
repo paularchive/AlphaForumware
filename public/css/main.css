@@ -6,6 +6,14 @@
 	border-color: #3b83c0;
 }
 
+.ui.inverted.blue.attached.segment a {
+	color: #fff;
+}
+.ui.inverted.blue.attached.segment a:hover {
+	color: #E6E6E6;
+	text-decoration: underline;
+}
+
 .ui.items > .item > .content > .description {
 	margin-top: 0;
 	max-width: auto;

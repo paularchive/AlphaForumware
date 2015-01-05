@@ -25,19 +25,19 @@ Route::group(array('prefix' => 'forum'), function()
 	Route::group(array('before' => 'admin'), function()
 	{
 		Route::get('/category/{slug}/delete', array('uses' => 'ForumController@deleteGroup', 'as' => 'forum-delete-group'));
-		Route::get('/category/{slug}/delete', array('uses' => 'ForumController@deleteCategory', 'as' => 'forum-delete-category'));
-		Route::get('/category/{slug}/edit', array('uses' => 'ForumController@editCategory', 'as' => 'forum-edit-category'));
+		Route::get('/subcategory/{slug}/delete', array('uses' => 'ForumController@deleteCategory', 'as' => 'forum-delete-category'));
+		Route::get('/subcategory/{slug}/edit', array('uses' => 'ForumController@editCategory', 'as' => 'forum-edit-category'));
 		Route::get('/reply/{id}/deletereply', array('uses' => 'ForumController@deleteReply', 'as' => 'forum-delete-comment'));
 		Route::get('/reply/{id}/editreply', array('uses' => 'ForumController@editReply', 'as' => 'forum-edit-comment'));
 		Route::get('/category/{slug}/edit', array('uses' => 'ForumController@editGroup', 'as' => 'forum-edit-group'));
 
 		Route::group(array('before' => 'csrf'), function()
 		{
-			Route::post('/category/{id}/new', array('uses' => 'ForumController@storeCategory', 'as' => 'forum-store-category'));
-			Route::post('/category/{id}/edit', array('uses' => 'ForumController@editCategory', 'as' => 'forum-edit-category'));
-			Route::post('/comment/{id}/edit', array('uses' => 'ForumController@editComment', 'as' => 'forum-edit-comment'));
-			Route::post('/group', array('uses' => 'ForumController@storeGroup', 'as' => 'forum-store-group'));
-			Route::post('/group/{id}/edit', array('uses' => 'ForumController@editGroup', 'as' => 'forum-edit-group'));
+			Route::post('/subcategory/{$slug}/edit', array('uses' => 'ForumController@editCategory', 'as' => 'forum-edit-category'));
+			Route::post('/reply/{id}/edit', array('uses' => 'ForumController@editComment', 'as' => 'forum-edit-comment'));
+			Route::post('/category/new', array('uses' => 'ForumController@storeGroup', 'as' => 'forum-store-group'));
+			Route::post('/category/{$slug}/edit', array('uses' => 'ForumController@editGroup', 'as' => 'forum-edit-group'));
+			Route::post('/category/{slug}/newsubcat', array('uses' => 'ForumController@storeCategory', 'as' => 'forum-store-category'));
 		});
 	});
 	Route::group(array('before' => 'auth'), function()

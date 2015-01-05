@@ -21,7 +21,7 @@
 </div>
 	<div class="sixteen wide column">
 		<div class="ui column form{{ ($errors->has()) ? ' error' : '' }}">
-			<h1>Post a reply to: <small>{{ $topic->title }} </small></h1>
+			<h1>Reply &raquo; {{ $topic->title }}</h1>
 
 			@if($errors->has())
 				<div class="ui error message">

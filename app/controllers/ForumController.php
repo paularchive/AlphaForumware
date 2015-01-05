@@ -73,14 +73,14 @@ class ForumController extends BaseController {
 	public function storeGroup()
 	{
 		$validate = Validator::make(Input::all(), array(
-			'group_name' => 'required|unique:forum_groups,title'
+			'group_name' => 'required|unique:forum_categories,title'
 		));
 
 		if($validate->fails())
-			return Redirect::route('forum-home')->withInput()->withErrors($validate)->with('modal', '#group_modal');
+			return Redirect::route('forum-home')->withInput()->withErrors($validate)->with('adderror', '#group_modal');
 		else
 		{
-			$group = new ForumGroup;
+			$group = new ForumCategory;
 			$group->title = Input::get('group_name');
 			$group->author_id = Auth::user()->id;
 
@@ -161,29 +161,30 @@ class ForumController extends BaseController {
 			return Redirect::route('forum-home')->with('fail', 'An error occured while deleting the group.');
 	}
 
-	public function storeCategory($id)
+	public function storeCategory($slug)
 	{
+		$category = ForumCategory::findBySlug($slug);
+			if($category == null)
+				return Redirect::route('forum-home')->with('fail', "That category doesn't exist");
+
 		$validate = Validator::make(Input::all(), array(
-			'category_name' => 'required|unique:forum_categories,title'
+			'category_name' => 'required'
 		));
 
 		if($validate->fails())
-			return Redirect::route('forum-home')->withInput()->withErrors($validate)->with('category-modal', '#category_modal')->with('group-id', $id);
+			return Redirect::route('forum-category', $category->slug)->withInput()->withErrors($validate)->with('adderror', '#dummydata');
 		else
 		{
-			$group = ForumGroup::find($id);
-			if($group == null)
-				return Redirect::route('forum-home')->with('fail', 'That group doesn\'t exist');
 
-			$category = new ForumCategory;
-			$category->title = Input::get('category_name');
-			$category->author_id = Auth::user()->id;
-			$category->group_id = $id;
+			$subcategory = new ForumSubCategory;
+			$subcategory->title = Input::get('category_name');
+			$subcategory->author_id = Auth::user()->id;
+			$subcategory->group_id = $category->id;
 
-			if($category->save())
-				return Redirect::route('forum-home')->with('success', 'The category was created.');
+			if($subcategory->save())
+				return Redirect::route('forum-category', $category->slug)->with('success', 'The subcategory was created.');
 			else
-				return Redirect::route('forum-home')->with('fail', 'An error occured while saving the new category. Please try again.');		}
+				return Redirect::route('forum-category', $category->slug)->with('fail', 'An error occured while saving the new subcategory. Please try again.');		}
 	}
 
 	public function editCategory($id)
