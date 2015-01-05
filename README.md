@@ -3,7 +3,7 @@
 #####What is new in v2.0?
 version 2.0 will no longer include bootstrap but Semantic UI
 
-AlphaForumware is a forum application written in PHP. We use the Laravel PHP Framework and Bootstrap 3.3.1. It's possible to:
+AlphaForumware is a forum application written in PHP. We use the Laravel PHP Framework and Semantic UI. It's possible to:
 * Register/Login
 * Create/Edit/Delete Forum Groups
 * Create/Edit/Delete Forum Categories in Groups
