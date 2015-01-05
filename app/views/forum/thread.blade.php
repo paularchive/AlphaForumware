@@ -10,9 +10,9 @@
 	<div class="ui breadcrumb segment" style="width: 100%;">
 		<a href="{{ URL::route('forum-home') }}" class="section">Forum</a>
 		<i class="right chevron icon divider"></i>
-		<a href="{{ URL::route('forum-home') }}" class="section">{{ $thread->group->title }}</a>
+		<a href="{{ URL::route('forum-category', $thread->group_id) }}" class="section">{{ $thread->category->title }}</a>
 		<i class="right chevron icon divider"></i>
-		<a href="{{ URL::route('forum-category', $thread->category->id) }}" class="section">{{ $thread->category->title }}</a>
+		<a href="{{ URL::route('forum-sub-category', $thread->category->id) }}" class="section">{{ $thread->subcategory->title }}</a>
 		<i class="right chevron icon divider"></i>
 		<div class="active section">{{ $thread->title }}</div>
 	</div>

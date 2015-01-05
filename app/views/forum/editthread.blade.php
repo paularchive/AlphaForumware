@@ -6,67 +6,92 @@
 @stop
 
 @section('content')
-	<ol class="breadcrumb">
-		<li><a href="{{ URL::route('forum-home') }}">Forum</a></li>
-		<li><a href="{{ URL::route('forum-category', $thread->category->id) }}">{{ $thread->category->title }}</a></li>
-		<li class="active">Edit: {{ $thread->title }}</li>
-	</ol>
+<div class="sixteen wide column">
+	<div class="ui breadcrumb segment" style="width: 100%;">
+		<a href="{{ URL::route('forum-home') }}" class="section">Forum</a>
+		<i class="right chevron icon divider"></i>
+		<a href="{{ URL::route('forum-category', $thread->group_id) }}" class="section">{{ $thread->category->title }}</a>
+		<i class="right chevron icon divider"></i>
+		<a href="{{ URL::route('forum-sub-category', $thread->category_id) }}" class="section">{{ $thread->subcategory->title }}</a>
+		<i class="right chevron icon divider"></i>
+		<div class="active section">Edit &raquo; {{ $thread->title }}</div>
+	</div>
+</div>
+<div class="sixteen wide column">
+	<div class="ui column form{{ ($errors->has()) ? ' error' : '' }}">
+		<h1>Edit &raquo; {{ $thread->title }}</h1>
 
-	<h1>Edit: {{ $thread->title }}</h1>
-
-	{{ Form::model($thread, array('route' => array('forum-edit-thread', $thread->id), 'id' => 'postform')) }}    
-
-		{{ Form::openGroup('title', 'Title:') }}
-	        {{ Form::text('title') }}
-	    {{ Form::closeGroup() }}
-
-		<div class="btn-toolbar" style="margin-bottom: 5px;">
-			<div class="btn-group">
-				<button type="button" class="btn btn-default" onclick="bbstyle(0)" title="Bold"><i class="fa fa-bold"></i></button>
-				<button type="button" class="btn btn-default" onclick="bbstyle(2)" title="Italic"><i class="fa fa-italic"></i></button>
-				<button type="button" class="btn btn-default" onclick="bbstyle(4)" title="Underline"><i class="fa fa-underline"></i></button>
-			</div>
-			
-			<div class="btn-group">
-				<button type="button" class="btn btn-default" onclick="bbstyle(10)" title="Unordered list"><i class="fa fa-list-ul"></i></button>
-				<div class="btn-group">
-					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="Ordered list"><i class="fa fa-list-ol"></i> <span class="caret"></span></button>
-					<ul class="dropdown-menu" role="menu">
-						<li><a href="#" onclick="bbstyle(12)">Alphabetic</a></li>
-						<li><a href="#" onclick="bbstyle(20)">Numberic</a></li>
-					</ul>
-				</div>
-				<button type="button" class="btn btn-default" onclick="bbstyle(-1)" title="List item">[*]</button>
-			</div>
-			
-			<!--select name="addbbcode20" onchange="bbfontstyle('[size=' + this.form.addbbcode20.options[this.form.addbbcode20.selectedIndex].value + ']', '[/size]');this.form.addbbcode20.selectedIndex = 2;" title="Font size: [size=85]small text[/size]">
-				<option value="50">Tiny</option>
-				<option value="85">Small</option>
-				<option value="100" selected="selected">Normal</option>
-				<option value="150">Large</option>	
-				<option value="200">Huge</option>
+		@if($errors->has())
+			<div class="ui error message">
+				<div class="header">There where some errors while submitting your information</div>
 				
-			</select Size doesn't work yet -->
-
-			<div class="btn-group">
-				<button type="button" class="btn btn-default" onclick="bbstyle(16)" title="Link"><i class="fa fa-link"></i></button>
-				<button type="button" class="btn btn-default" onclick="bbstyle(14)" title="Image"><i class="fa fa-picture-o"></i></button>
-				<button type="button" class="btn btn-default" onclick="bbstyle(18)" title="Youtube"><i class="fa fa-youtube-play"></i></button>
+				<ul class="list">
+				@foreach($errors->all() as $error)
+					<li>{{ $error }}</li>
+				@endforeach
+				</ul>
 			</div>
-			
-			<div class="btn-group">
-				<button type="button" class="btn btn-default" onclick="bbstyle(6)" title="Quote"><i class="fa fa-quote-left"></i></button>
-				<button type="button" class="btn btn-default" onclick="bbstyle(8)" title="Code"><i class="fa fa-code"></i></button>
+		@endif
+
+		{{ Form::model($thread, array('route' => array('forum-edit-thread', $thread->id), 'id' => 'postform')) }}    
+
+			<div class="field{{ ($errors->has('title')) ? ' error' : '' }}">
+				<label for="username">Subject: </label>
+				{{ Form::text('title') }}
 			</div>
-		</div>
 
-	    {{ Form::openGroup('body') }}
-	        {{ Form::textarea('body', null, array('rows' => '5')) }}
-	    {{ Form::closeGroup() }}
+			<div class="btn-toolbar" style="margin-bottom: 5px;">
+				<div class="ui icon buttons">
+					<button type="button" class="ui button" onclick="bbstyle(0)" title="Bold"><i class="fa fa-bold"></i></button>
+					<button type="button" class="ui button" onclick="bbstyle(2)" title="Italic"><i class="fa fa-italic"></i></button>
+					<button type="button" class="ui button" onclick="bbstyle(4)" title="Underline"><i class="fa fa-underline"></i></button>
+				</div>
+				
+				<div class="ui icon buttons">
+					<button type="button" class="ui button" onclick="bbstyle(10)" title="Unordered list"><i class="fa fa-list-ul"></i></button>
+					<div class="ui dropdown button" data-trigger="hover">
+						<div title="Ordered list">
+							<i class="fa fa-list-ol"></i> <i class="dropdown icon"></i>
+						</div>
+						<div class="menu">
+							<div class="item" onclick="bbstyle(12)">Alphabetic</div>
+							<div class="item" onclick="bbstyle(20)">Numberic</div>
+						</div>
+					</div>
+					<button type="button" class="ui button" onclick="bbstyle(-1)" title="List item">[*]</button>
+				</div>
+				
+				<!--select name="addbbcode20" onchange="bbfontstyle('[size=' + this.form.addbbcode20.options[this.form.addbbcode20.selectedIndex].value + ']', '[/size]');this.form.addbbcode20.selectedIndex = 2;" title="Font size: [size=85]small text[/size]">
+					<option value="50">Tiny</option>
+					<option value="85">Small</option>
+					<option value="100" selected="selected">Normal</option>
+					<option value="150">Large</option>	
+					<option value="200">Huge</option>
+					
+				</select Size doesn't work yet -->
 
-	    <p>{{ Form::submit('Save Thread', array('class' => 'btn btn-primary')) }}<p>
+				<div class="ui icon buttons">
+					<button type="button" class="ui button" onclick="bbstyle(16)" title="Link"><i class="fa fa-link"></i></button>
+					<button type="button" class="ui button" onclick="bbstyle(14)" title="Image"><i class="fa fa-picture-o"></i></button>
+					<button type="button" class="ui button" onclick="bbstyle(18)" title="Youtube"><i class="fa fa-youtube-play"></i></button>
+				</div>
+				
+				<div class="ui icon buttons">
+					<button type="button" class="ui button" onclick="bbstyle(6)" title="Quote"><i class="fa fa-quote-left"></i></button>
+					<button type="button" class="ui button" onclick="bbstyle(8)" title="Code"><i class="fa fa-code"></i></button>
+				</div>
+			</div>
 
-    {{ Form::close() }}
+			<div class="field{{ ($errors->has('body')) ? ' error' : '' }}">
+				{{ Form::textarea('body', null, array('rows' => '5')) }}
+			</div>
+
+		    <p>{{ Form::submit('Save Topic', array('class' => 'ui button green')) }}</p>
+
+		{{ Form::close() }}
+
+	</div>
+</div>
 @stop
 
 @section('javascript')

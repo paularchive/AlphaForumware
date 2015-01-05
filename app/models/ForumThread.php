@@ -4,14 +4,14 @@ class ForumThread extends BaseModel
 {
 	protected $table = 'forum_threads';
 
-	public function group()
-	{
-		return $this->belongsTo('ForumGroup');
-	}
-
 	public function category()
 	{
-		return $this->belongsTo('ForumCategory', 'category_id');
+		return $this->belongsTo('ForumCategory');
+	}
+
+	public function subcategory()
+	{
+		return $this->belongsTo('ForumSubCategory', 'category_id');
 	}
 
 	public function comments()

@@ -17,6 +17,7 @@ Route::group(array('prefix' => 'forum'), function()
 {
 	Route::get('/', array('uses' => 'ForumController@index', 'as' => 'forum-home'));
 	Route::get('/category/{id}', array('uses' => 'ForumController@category', 'as' => 'forum-category'));
+	Route::get('/subcategory/{id}', array('uses' => 'ForumController@subcategory', 'as' => 'forum-sub-category'));
 	Route::get('/thread/{id}', array('uses' => 'ForumController@thread', 'as' => 'forum-thread'));
 
 	Route::group(array('before' => 'admin'), function()

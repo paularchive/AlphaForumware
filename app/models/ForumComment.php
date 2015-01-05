@@ -4,14 +4,14 @@ class ForumComment extends BaseModel
 {
 	protected $table = 'forum_comments';
 
-	public function group()
-	{
-		return $this->belongsTo('ForumGroup');
-	}
-
 	public function category()
 	{
-		return $this->belongsTo('ForumCategory');
+		return $this->belongsTo('ForumSubCategory');
+	}
+
+	public function subcategory()
+	{
+		return $this->belongsTo('ForumSubCategory');
 	}
 
 	public function thread()

@@ -15,24 +15,24 @@
 
 @if(Auth::check() && Auth::user()->isAdmin())
 	<div class="sixteen wide column">
-		<a href="#" class="ui button" data-toggle="modal" data-target="#group_modal" data-backdrop="false">Add Group</a>
+		<a href="#" class="ui purple button">Add category</a>
 	</div>
 @endif
 
 <div class="sixteen wide column">
-@foreach($groups as $group)
+@foreach($categories as $category)
 	<div class="ui blue inverted top attached segment">
-		{{ $group->title }}
+		<a href="{{ URL::route('forum-category', $category->id) }}">{{ $category->title }}</a>
 	</div>
 	<div class="ui link divided items attached segment">
-	@foreach($categories as $category)
-		@if($category->group_id == $group->id)
-		<a href="{{ URL::route('forum-category', $category->id) }}" class="item">
+	@foreach($subcategories as $subcategory)
+		@if($subcategory->group_id == $category->id)
+		<a href="{{ URL::route('forum-sub-category', $subcategory->id) }}" class="item">
 			<!--div class="ui tiny image">
 					<img src="topic.jpg">
 			</div-->
 			<div class="content">
-				<div class="header">{{ $category->title }}</div>
+				<div class="header">{{ $subcategory->title }}</div>
 				<div class="description">
 					<p>Description support isn't added yet!</p>
 				 </div>

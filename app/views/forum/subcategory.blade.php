@@ -2,7 +2,7 @@
 
 @section('head')
 	@parent
-	<title>Forum | {{ $category->title }}</title>
+	<title>Forum | {{ $subcategory->title }}</title>
 @stop
 
 @section('content')
@@ -11,27 +11,39 @@
 	<div class="ui breadcrumb segment" style="width: 100%;">
 		<a href="{{ URL::route('forum-home') }}" class="section">Forum</a>
 		<i class="right chevron icon divider"></i>
-		<div class="active section">{{ $category->title }}</div>
+		<a href="{{ URL::route('forum-category', $subcategory->group_id) }}" class="section">{{ $subcategory->category->title }}</a>
+		<i class="right chevron icon divider"></i>
+		<div class="active section">{{ $subcategory->title }}</div>
 	</div>
 </div>
 
 @if(Auth::check())
 <div class="sixteen wide column">
-	<a href="#" class="ui purple button">Add subcategory</a>
+	<a href="{{ URL::route('forum-get-new-thread', $subcategory->id) }}" class="ui fade animated orange button">
+		<div class="visible content">Post a new topic</div>
+		<div class="hidden content">
+			<i class="right arrow icon"></i>
+		</div>
+	</a>
 </div>
 @endif
 
 <div class="sixteen wide column">
 	<div class="ui blue inverted top attached segment">
-		{{ $category->title }}
+		{{ $subcategory->title }}
 	</div>
 	<div class="ui link divided items attached segment">
-	@foreach($subcategories as $subcategory)
-		<a href="{{ URL::route('forum-sub-category', $subcategory->id) }}" class="item">
+	@foreach($threads as $thread)
+		<a href="{{ URL::route('forum-thread', $thread->id) }}" class="item">
+			<!--div class="ui tiny image">
+					<img src="topic.jpg">
+			</div-->
 			<div class="content">
-				<div class="header">{{ $subcategory->title }}</div>
-				<div class="description">
-					<p>Description support isn't added yet!</p>
+				<div class="header">{{ $thread->title }}</div>
+				<div class="meta">
+					<div class="created">
+						<p>by <strong>{{ $thread->author()->first()->username }}</strong> &raquo; {{ $thread->created_at }}</p>
+					</div>
 				 </div>
 			</div>
 		</a>

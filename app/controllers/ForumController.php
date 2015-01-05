@@ -9,12 +9,11 @@ class ForumController extends BaseController {
 	 */
 	public function index()
 	{
-		$groups = ForumGroup::all();
 		$categories = ForumCategory::all();
+		$subcategories = ForumSubCategory::all();
 		
-		return View::make('forum.index')->with('groups', $groups)->with('categories', $categories);
+		return View::make('forum.index')->with('categories', $categories)->with('subcategories', $subcategories);
 	}
-
 
 	/**
 	 * Show a category.
@@ -26,10 +25,27 @@ class ForumController extends BaseController {
 	{
 		$category = ForumCategory::find($id);
 		if($category == null)
-			return Redirect::route('forum-home')->with('fail', 'That category doesn\'t exist');
+			return Redirect::route('forum-home')->with('fail', "That category doesn't exist");
 		
-		$threads = $category->threads()->get();
-		return View::make('forum.category')->with('category', $category)->with('threads', $threads);
+		$subcategories = $category->subcategories()->get();
+		return View::make('forum.category')->with('category', $category)->with('subcategories', $subcategories);
+	}
+
+
+	/**
+	 * Show a subcategory.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function subcategory($id)
+	{
+		$subcategory = ForumSubCategory::find($id);
+		if($subcategory == null)
+			return Redirect::route('forum-home')->with('fail', "That subcategory doesn't exist");
+		
+		$threads = $subcategory->threads()->get();
+		return View::make('forum.subcategory')->with('subcategory', $subcategory)->with('threads', $threads);
 	}
 
 
@@ -232,14 +248,14 @@ class ForumController extends BaseController {
 
 	public function newThread($id)
 	{
-		$category = ForumCategory::find($id);
-		return View::make('forum.newthread')->with('id', $id)->with('category', $category);
+		$subcategory = ForumSubCategory::find($id);
+		return View::make('forum.newthread')->with('id', $id)->with('subcategory', $subcategory);
 	}
 
 	public function storeThread($id)
 	{
-		$category = ForumCategory::find($id);
-		if($category == null)
+		$subcategory = ForumSubCategory::find($id);
+		if($subcategory == null)
 			return Redirect::route('forum-get-new-thread')->with('fail', 'You posted to an invalid category.');
 
 		$validate = Validator::make(Input::all(), array(
@@ -255,7 +271,7 @@ class ForumController extends BaseController {
 			$thread->title = Input::get('title');
 			$thread->body = Input::get('body');
 			$thread->category_id = $id;
-			$thread->group_id = $category->group_id;
+			$thread->group_id = $subcategory->group_id;
 			$thread->author_id = Auth::user()->id;
 
 			if($thread->save())

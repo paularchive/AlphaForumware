@@ -4,18 +4,23 @@ class ForumCategory extends BaseModel
 {
 	protected $table = 'forum_categories';
 
-	public function group()
+	public function subcategories()
 	{
-		return $this->belongsTo('ForumGroup');
+		return $this->hasMany('ForumSubCategory', 'group_id');
 	}
 
 	public function threads()
 	{
-		return $this->hasMany('ForumThread', 'category_id');
+		return $this->hasMany('ForumThread', 'group_id');
 	}
 
 	public function comments()
 	{
-		return $this->hasMany('ForumComment', 'category_id');
+		return $this->hasMany('ForumComment', 'group_id');
+	}
+
+	public function author()
+	{
+		return $this->belongsTo('User');
 	}
 }
