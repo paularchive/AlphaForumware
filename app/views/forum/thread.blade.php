@@ -20,7 +20,7 @@
 
 @if(Auth::check())
 <div class="row">
-	<div class="eight wide column">
+	<div class="six wide column">
 		<a href="{{ URL::route('forum-new-comment', $thread->slug) }}" class="ui vertical animated teal button">
 			<div class="visible content">Reply</div>
 			<div class="hidden content">
@@ -29,7 +29,7 @@
 		</a>
 	</div>
 	@if(Auth::user()->isAdmin() || Auth::user()->id == $thread->author_id)
-	<div class="right aligned eight wide column">
+	<div class="right aligned ten wide column">
 		<div class="ui buttons">
 			<a href="{{ URL::route('forum-edit-thread', $thread->slug) }}" class="ui button">Edit</a>
 			<div class="or"></div>
@@ -61,7 +61,7 @@
 			</div>
 			@if(Auth::check() && Auth::user()->isAdmin() || Auth::check() && Auth::user()->id == $thread->author_id)
 			<div class="right floated column">
-				<div class="ui top right pointing dropdown" data-trigger="hover">
+				<div class="ui top right pointing dropdown black basic icon button" data-trigger="hover">
 						<i class="fa fa-bars"></i>
 					<div class="menu">
 						<a href="{{ URL::action('ForumController@nedReply', array('topic' => $thread->slug, 'edit' => $comment->id)); }}" class="item">Edit</a>
