@@ -354,12 +354,41 @@ class ForumController extends BaseController {
 			return Redirect::route('forum-thread', $thread->slug)->with('fail', 'You do not own this thread! If you beleave this is a server error contact one of the Staff Members.');
 	}
 
-	public function newReply($slug)
+	public function nedReply($slug)
 	{
 		$topic = ForumThread::findBySlug($slug);
 		if($topic == null)
 			return Redirect::route('forum-home')->with('fail', "That topic does't exist.");
-		return View::make('forum.newcomment')->with('topic', $topic);
+
+		if(Input::get('edit')) //We got a edit request so let's load the edit view
+		{
+			$reply = ForumComment::find(Input::get('edit'));
+			if($reply == null)
+					return Redirect::route('forum-home')->with('fail', 'The comment you are trying to edit does not exist!');
+
+			if(Auth::user()->id == $reply->author_id || Auth::user()->isAdmin())
+				return View::make('forum.editcomment')->with('reply', $reply);
+			else
+				return Redirect::route('forum-thread', $topic->id)->with('fail', 'You do not own this comment! If you beleave this is a server error contact one of the Staff Members.');
+		}
+		elseif(Input::get('delete')) //We got a delete request so let's delete it
+		{
+			$reply = ForumComment::find(Input::get('delete'));
+			if($reply == null)
+				return Redirect::route('forum-home')->with('fail', 'The comment you are trying to edit does not exist!');
+			
+			if(Auth::user()->id == $reply->author_id || Auth::user()->isAdmin())
+			{
+				if($reply->delete())
+					return Redirect::route('forum-thread', $topic->slug)->with('info', "The comment is deleted.");
+				else
+					return Redirect::route('forum-thread', $topic->slug)->with('fail', "An error occured while deleting the comment!");
+			}
+			else
+				return Redirect::route('forum-thread', $topic->slug)->with('fail', 'You do not own this comment! If you beleave this is a server error contact one of the Staff Members.');
+		}
+		else //We didn't got a edit or delete request so load the new comment view
+			return View::make('forum.newcomment')->with('topic', $topic);
 	}
 
 	public function storeReply($slug)
@@ -367,77 +396,62 @@ class ForumController extends BaseController {
 		$topic = ForumThread::findBySlug($slug);
 		if($topic == null)
 			return Redirect::route('forum-home')->with('fail', "That topic does't exist.");
-		
-		$validate = Validator::make(Input::all(), array(
-			'body' => 'required|min:5'
-		));
-
-		if($validate->fails())
+	
+		if(Input::get('edit')) //We got a edit request so lets edit the requested comment
 		{
-			return Redirect::route('forum-new-comment', $id)->withInput()->withErrors($validate)->with('fail', "Please fill in the form correctly!");
-		}
-		else
-		{
-			$comment = new ForumComment();
-			$comment->body = Input::get('body');
-			$comment->author_id = Auth::user()->id;
-			$comment->thread_id = $id;
-			$comment->category_id = $topic->subcategory->id;
-			$comment->group_id = $topic->category->id;
+			$reply = ForumComment::find(Input::get('edit'));
+			if($reply == null)
+					return Redirect::route('forum-home')->with('fail', 'The comment you are trying to edit does not exist!');
 
-			if($comment->save())
-				return Redirect::route('forum-thread', $topic->slug)->with('success', "Your comment is saved successfully.");
-			else
-				return Redirect::route('forum-thread', $topic->slug)->with('fail', "An error occured while saving your comment. Please try again!");
-		}
-	}
-
-	public function deleteReply($slug)
-	{
-		$comment = ForumComment::findBySlug($slug);
-		if($comment == null)	
-			return Redirect::route('forum-home')->with('fail', "That comment does't exist.");
-		
-		if($comment->delete())
-			return Redirect::route('forum-thread', $comment->thread->slug)->with('info', "The comment is deleted.");
-		else
-			return Redirect::route('forum-thread', $comment->thread->slug)->with('fail', "An error occured while deleting the comment!");
-	}
-
-	public function editComment($slug)
-	{
-		$comment = ForumComment::findBySlug($slug);
-		if($comment == null)
-				return Redirect::route('forum-home')->with('fail', 'The comment you are trying to edit does not exist!');
-		if(Auth::user()->id == $comment->author_id || Auth::user()->isAdmin())
-		{
-			if(Request::isMethod('get'))
-				return View::make('forum.editcomment')->with('comment', ForumComment::find($id));
-
-			elseif(Request::isMethod('post'))
+			elseif(Auth::user()->id == $reply->author_id || Auth::user()->isAdmin())
 			{
 				$validate = Validator::make(Input::all(), array(
 					'body' => 'required|min:10|max:65000'
 				));
 
 				if($validate->fails())
-					return Redirect::route('forum-edit-comment', $id)->withInput()->withErrors($validate)->with('fail', 'Your input doesn\'t match the requirements.');
+					return Redirect::action('ForumController@newReply', array('edit' => Input::get('edit')))->withInput()->withErrors($validate);
 				else
 				{
-					$comment->body = Input::get('body');
+					$reply->body = Input::get('body');
 
-					if($comment->save())
+					if($reply->save())
 					{
-						return Redirect::route('forum-thread', $comment->thread->id)->with('success', 'Your comment has been saved.');
+						return Redirect::route('forum-thread', $topic->slug)->with('success', 'Your comment has been saved.');
 					}
 					else
 					{
-						return Redirect::route('forum-edit-comment', $id)->with('fail', 'An error occured while saving your comment.')->withInput();
+						return Redirect::action('ForumController@newReply', array('edit' => Input::get('edit')))->withInput();
 					}
 				}
 			}
+			else
+				return Redirect::route('forum-thread', $topic->slug)->with('fail', 'You do not own this comment! If you beleave this is a server error contact one of the Staff Members.');
 		}
-		else
-			return Redirect::route('forum-comment', $id)->with('fail', 'You do not own this comment! If you beleave this is a server error contact one of the Staff Members.');
+		else //We didn't got a edit request so store a new comment
+		{	
+			$validate = Validator::make(Input::all(), array(
+				'body' => 'required|min:5'
+			));
+
+			if($validate->fails())
+			{
+				return Redirect::route('forum-new-comment', $id)->withInput()->withErrors($validate)->with('fail', "Please fill in the form correctly!");
+			}
+			else
+			{
+				$comment = new ForumComment();
+				$comment->body = Input::get('body');
+				$comment->author_id = Auth::user()->id;
+				$comment->thread_id = $topic->id;
+				$comment->category_id = $topic->subcategory->id;
+				$comment->group_id = $topic->category->id;
+
+				if($comment->save())
+					return Redirect::route('forum-thread', $topic->slug)->with('success', "Your comment is saved successfully.");
+				else
+					return Redirect::route('forum-thread', $topic->slug)->with('fail', "An error occured while saving your comment. Please try again!");
+			}
+		}
 	}
 }

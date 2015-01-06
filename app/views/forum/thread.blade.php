@@ -53,7 +53,7 @@
 </div>
 
 @foreach($thread->comments()->get() as $comment)
-<div class="sixteen wide column" id="thread-comment">
+<div class="sixteen wide column">
 	<div class="ui top attached segment thread-title">
 		<div class="eight column row">
 			<div class="left floated column">
@@ -61,23 +61,14 @@
 			</div>
 			@if(Auth::check() && Auth::user()->isAdmin() || Auth::check() && Auth::user()->id == $thread->author_id)
 			<div class="right floated column">
-				<div class="ui dropdown" data-trigger="click">
-					<span id="dropdown-toggle" style="opacity:0.5">
+				<div class="ui top right pointing dropdown" data-trigger="hover">
 						<i class="fa fa-bars"></i>
-					</span>
 					<div class="menu">
-						<a href="{{ URL::route('forum-edit-comment', $comment->id) }}" class="item">Edit</a>
-						<a href="{{ URL::route('forum-delete-comment', $comment->id) }}" class="item">Delete</a>
+						<a href="{{ URL::action('ForumController@nedReply', array('topic' => $thread->slug, 'edit' => $comment->id)); }}" class="item">Edit</a>
+						<a href="{{ URL::action('ForumController@nedReply', array('topic' => $thread->slug, 'delete' => $comment->id)); }}" class="item">Delete</a>
 					</div>
 				</div>
 			</div>
-			<!--div class="dropdown pull-right">
-				<button id="options-menu" type="button" class="btn btn-default btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Options <span class="caret"></span></button>
-				<ul class="dropdown-menu" role="menu" aria-labelledby="options-menu">
-					<li><a href="{{ URL::route('forum-edit-comment', $comment->id) }}">Edit Comment</a></li>
-					<li><a href="{{ URL::route('forum-delete-comment', $comment->id) }}">Delete Comment</a></li>
-				</ul>
-			</div-->
 			@endif
 		</div>
 	</div>
@@ -92,7 +83,7 @@
 
 @if(Auth::check())
 <div class="sixteen wide column">
-	<a href="{{ URL::route('forum-new-comment', $thread->id) }}" class="ui vertical animated teal button">
+	<a href="{{ URL::route('forum-new-comment', $thread->slug) }}" class="ui vertical animated teal button">
 		<div class="visible content">Reply</div>
 		<div class="hidden content">
 			<i class="reply icon"></i>
@@ -101,30 +92,8 @@
 </div>
 @endif
 
-	@if(Auth::check() && Auth::user()->isAdmin() || Auth::check() && Auth::user()->id == $thread->id)
-	<div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog modal-sm">
-			<div class="modal-content">
-				<div class="modal-body">
-					<h3>Are you shure?</h3>
-				</div>
-				<button class="delete-cancel-btn" type="button" data-dismiss="modal">Cancel</button>
-				<a href="{{ URL::route('forum-delete-thread', $thread->slug) }}" class="delete-confirm-btn">Confirm</a>
-			</div>
-		</div>
-	</div>
-	@endif
 @stop
 
 @section('javascript')
 	@parent
-	<script type="text/javascript">
-	$('#thread-comment').each(function() {
-		$(this).hover(function() {
-			$(this).find('.ui.dropdown #dropdown-toggle').animate({opacity: '1'});
-		}, function() {
-			$(this).find('.ui.dropdown #dropdown-toggle').animate({opacity: '0.5'});
-		});
-	});
-	</script>
 @stop

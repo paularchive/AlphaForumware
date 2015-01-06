@@ -11,12 +11,12 @@ class ForumComment extends BaseModel
 
 	public function subcategory()
 	{
-		return $this->belongsTo('ForumSubCategory');
+		return $this->belongsTo('ForumSubCategory', 'thread_id');
 	}
 
 	public function thread()
 	{
-		return $this->belongsTo('ForumThread');
+		return $this->belongsTo('ForumThread', 'thread_id');
 	}
 
 	public function author()

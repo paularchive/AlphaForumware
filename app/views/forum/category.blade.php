@@ -15,7 +15,7 @@
 	</div>
 </div>
 
-@if(Auth::check())
+@if(Auth::check() && Auth::user()->isAdmin())
 <div class="sixteen wide column">
 	<div data-func="addsubcategory" class="ui purple button">Add subcategory</div>
 </div>

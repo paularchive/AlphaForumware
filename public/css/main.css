@@ -28,3 +28,11 @@
 	margin-top: 0;
 	margin-bottom: 0;
 }
+.thread-title .ui.top.right.pointing.dropdown .menu {
+	top: 100%;
+	bottom: auto;
+	right: 0%;
+	left: auto;
+	margin: 1em 0em 0em;
+	margin-right: -12px;
+}

@@ -19,81 +19,81 @@
 		<div class="active section">New Reply</div>
 	</div>
 </div>
-	<div class="sixteen wide column">
-		<div class="ui column form{{ ($errors->has()) ? ' error' : '' }}">
-			<h1>Reply &raquo; {{ $topic->title }}</h1>
+<div class="sixteen wide column">
+	<div class="ui column form{{ ($errors->has()) ? ' error' : '' }}">
+		<h1>Reply &raquo; {{ $topic->title }}</h1>
 
-			@if($errors->has())
-				<div class="ui error message">
-					<div class="header">There where some errors while submitting your information</div>
-					
-					<ul class="list">
-					@foreach($errors->all() as $error)
-						<li>{{ $error }}</li>
-					@endforeach
-					</ul>
+		@if($errors->has())
+			<div class="ui error message">
+				<div class="header">There where some errors while submitting your information</div>
+				
+				<ul class="list">
+				@foreach($errors->all() as $error)
+					<li>{{ $error }}</li>
+				@endforeach
+				</ul>
+			</div>
+		@endif
+
+		{{ Form::open(array('route' => array('forum-store-comment', $topic->slug), 'id' => 'postform')) }}
+
+			<div class="field{{ ($errors->has('title')) ? ' error' : '' }}">
+				<label for="username">Subject: </label>
+				{{ Form::text('title', 'Re: '.$topic->title) }}
+			</div>
+
+			<div class="btn-toolbar" style="margin-bottom: 5px;">
+				<div class="ui icon buttons">
+					<button type="button" class="ui button" onclick="bbstyle(0)" title="Bold"><i class="fa fa-bold"></i></button>
+					<button type="button" class="ui button" onclick="bbstyle(2)" title="Italic"><i class="fa fa-italic"></i></button>
+					<button type="button" class="ui button" onclick="bbstyle(4)" title="Underline"><i class="fa fa-underline"></i></button>
 				</div>
-			@endif
-
-			{{ Form::open(array('route' => array('forum-store-comment', $topic->slug), 'id' => 'postform')) }}
-
-				<div class="field{{ ($errors->has('title')) ? ' error' : '' }}">
-					<label for="username">Subject: </label>
-					{{ Form::text('title', 'Re: '.$topic->title) }}
-				</div>
-
-				<div class="btn-toolbar" style="margin-bottom: 5px;">
-					<div class="ui icon buttons">
-						<button type="button" class="ui button" onclick="bbstyle(0)" title="Bold"><i class="fa fa-bold"></i></button>
-						<button type="button" class="ui button" onclick="bbstyle(2)" title="Italic"><i class="fa fa-italic"></i></button>
-						<button type="button" class="ui button" onclick="bbstyle(4)" title="Underline"><i class="fa fa-underline"></i></button>
-					</div>
-					
-					<div class="ui icon buttons">
-						<button type="button" class="ui button" onclick="bbstyle(10)" title="Unordered list"><i class="fa fa-list-ul"></i></button>
-						<div class="ui dropdown button" data-trigger="hover">
-							<div title="Ordered list">
-								<i class="fa fa-list-ol"></i> <i class="dropdown icon"></i>
-							</div>
-							<div class="menu">
-								<div class="item" onclick="bbstyle(12)">Alphabetic</div>
-								<div class="item" onclick="bbstyle(20)">Numberic</div>
-							</div>
+				
+				<div class="ui icon buttons">
+					<button type="button" class="ui button" onclick="bbstyle(10)" title="Unordered list"><i class="fa fa-list-ul"></i></button>
+					<div class="ui dropdown button" data-trigger="hover">
+						<div title="Ordered list">
+							<i class="fa fa-list-ol"></i> <i class="dropdown icon"></i>
 						</div>
-						<button type="button" class="ui button" onclick="bbstyle(-1)" title="List item">[*]</button>
+						<div class="menu">
+							<div class="item" onclick="bbstyle(12)">Alphabetic</div>
+							<div class="item" onclick="bbstyle(20)">Numberic</div>
+						</div>
 					</div>
-					
-					<!--select name="addbbcode20" onchange="bbfontstyle('[size=' + this.form.addbbcode20.options[this.form.addbbcode20.selectedIndex].value + ']', '[/size]');this.form.addbbcode20.selectedIndex = 2;" title="Font size: [size=85]small text[/size]">
-						<option value="50">Tiny</option>
-						<option value="85">Small</option>
-						<option value="100" selected="selected">Normal</option>
-						<option value="150">Large</option>	
-						<option value="200">Huge</option>
-						
-					</select Size doesn't work yet -->
-
-					<div class="ui icon buttons">
-						<button type="button" class="ui button" onclick="bbstyle(16)" title="Link"><i class="fa fa-link"></i></button>
-						<button type="button" class="ui button" onclick="bbstyle(14)" title="Image"><i class="fa fa-picture-o"></i></button>
-						<button type="button" class="ui button" onclick="bbstyle(18)" title="Youtube"><i class="fa fa-youtube-play"></i></button>
-					</div>
-					
-					<div class="ui icon buttons">
-						<button type="button" class="ui button" onclick="bbstyle(6)" title="Quote"><i class="fa fa-quote-left"></i></button>
-						<button type="button" class="ui button" onclick="bbstyle(8)" title="Code"><i class="fa fa-code"></i></button>
-					</div>
+					<button type="button" class="ui button" onclick="bbstyle(-1)" title="List item">[*]</button>
 				</div>
+				
+				<!--select name="addbbcode20" onchange="bbfontstyle('[size=' + this.form.addbbcode20.options[this.form.addbbcode20.selectedIndex].value + ']', '[/size]');this.form.addbbcode20.selectedIndex = 2;" title="Font size: [size=85]small text[/size]">
+					<option value="50">Tiny</option>
+					<option value="85">Small</option>
+					<option value="100" selected="selected">Normal</option>
+					<option value="150">Large</option>	
+					<option value="200">Huge</option>
+					
+				</select Size doesn't work yet -->
 
-				<div class="field{{ ($errors->has('body')) ? ' error' : '' }}">
-					{{ Form::textarea('body', null, array('rows' => '5')) }}
+				<div class="ui icon buttons">
+					<button type="button" class="ui button" onclick="bbstyle(16)" title="Link"><i class="fa fa-link"></i></button>
+					<button type="button" class="ui button" onclick="bbstyle(14)" title="Image"><i class="fa fa-picture-o"></i></button>
+					<button type="button" class="ui button" onclick="bbstyle(18)" title="Youtube"><i class="fa fa-youtube-play"></i></button>
 				</div>
+				
+				<div class="ui icon buttons">
+					<button type="button" class="ui button" onclick="bbstyle(6)" title="Quote"><i class="fa fa-quote-left"></i></button>
+					<button type="button" class="ui button" onclick="bbstyle(8)" title="Code"><i class="fa fa-code"></i></button>
+				</div>
+			</div>
 
-			    <p>{{ Form::submit('Post Reply', array('class' => 'ui button teal')) }}</p>
+			<div class="field{{ ($errors->has('body')) ? ' error' : '' }}">
+				{{ Form::textarea('body', null, array('rows' => '5')) }}
+			</div>
 
-			{{ Form::close() }}
+		    <p>{{ Form::submit('Post Reply', array('class' => 'ui button teal')) }}</p>
 
-		</div>
+		{{ Form::close() }}
+
 	</div>
+</div>
 
 @stop
 
