@@ -1,21 +1,16 @@
 ## AlphaForumware
 
-#####What is new in v2.0?
-version 2.0 will no longer include bootstrap but Semantic UI
+#####What is new in 0.2.0?
+Version 0.2.0 will no longer include bootstrap but Semantic UI
+And some of the functions are rewritten.
 
-I DO NOT RECOMMENT THIS BUILD JUST JET!
-#####Todo befor a stable release
-* Change all id links to slugs (almost done, required a database reset)
-* Let the edit modals/popups work again.
-* Finish up the style some more.
-* Clean up routes.php (It's all messed up atm!)
 
 AlphaForumware is a forum application written in PHP. We use the Laravel PHP Framework and Semantic UI. It's possible to:
 * Register/Login
-* Create/Edit/Delete Forum Groups
-* Create/Edit/Delete Forum Categories in Groups
-* Create/Edit/Delete Threads in Categories
-* Create/Delete Comments in Threads(edit soon!)
+* Create/Edit/Delete Forum Categories
+* Create/Edit/Delete Forum Sub Categories in Categories
+* Create/Edit/Delete Topics in Categories
+* Create/Edit/Delete Replies in Threads
 * Backend coming soon!
 
 Dependencies
