@@ -410,7 +410,7 @@ class ForumController extends BaseController {
 				));
 
 				if($validate->fails())
-					return Redirect::action('ForumController@newReply', array('edit' => Input::get('edit')))->withInput()->withErrors($validate);
+					return Redirect::action('ForumController@nedReply', array('edit' => Input::get('edit')))->withInput()->withErrors($validate);
 				else
 				{
 					$reply->body = Input::get('body');
@@ -421,7 +421,7 @@ class ForumController extends BaseController {
 					}
 					else
 					{
-						return Redirect::action('ForumController@newReply', array('edit' => Input::get('edit')))->withInput();
+						return Redirect::action('ForumController@nedReply', array('edit' => Input::get('edit')))->withInput();
 					}
 				}
 			}
@@ -436,7 +436,7 @@ class ForumController extends BaseController {
 
 			if($validate->fails())
 			{
-				return Redirect::route('forum-new-comment', $id)->withInput()->withErrors($validate)->with('fail', "Please fill in the form correctly!");
+				return Redirect::route('forum-new-comment', $slug)->withInput()->withErrors($validate)->with('fail', "Please fill in the form correctly!");
 			}
 			else
 			{
