@@ -410,7 +410,7 @@ class ForumController extends BaseController {
 				));
 
 				if($validate->fails())
-					return Redirect::action('ForumController@nedReply', array('edit' => Input::get('edit')))->withInput()->withErrors($validate);
+					return Redirect::action('ForumController@nedReply', array('topic' => $topic->slug, 'edit' => $reply->id))->withInput()->withErrors($validate);
 				else
 				{
 					$reply->body = Input::get('body');
@@ -421,7 +421,7 @@ class ForumController extends BaseController {
 					}
 					else
 					{
-						return Redirect::action('ForumController@nedReply', array('edit' => Input::get('edit')))->withInput();
+						return Redirect::action('ForumController@nedReply', array('topic' => $topic->slug, 'edit' => $reply->id))->withInput()->with('fail', 'An error occured while saving your reply! Please try again.');
 					}
 				}
 			}
