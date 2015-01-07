@@ -4,6 +4,9 @@
 	@parent
 	<title>Register</title>
 	<style type="text/css">
+	.ui.grid > [class*="two column"].row > .column {
+		width: 100% !important;
+	}
 	input[type=submit] {
 		width: 100%;
 	}
@@ -14,9 +17,8 @@
 		text-align: center;
 	}
 	@media (min-width: 768px) {
-		.content {
-			width: 40%;
-			margin: 0 auto 0;
+		.ui.grid > [class*="two column"].row > .column {
+			width: 50% !important;
 		}
 		input[type=submit] {
 			width: 70%;
@@ -26,28 +28,45 @@
 @stop
 
 @section('content')
-	<div class="content">
-		<h1>Register</h1>
 
-		{{ Form::open([ 'route' => 'postCreate' ]) }}
+	<div class="ui two column centered row">
+		<div class="ui column form{{ ($errors->has()) ? ' error' : '' }}">
+			<h1>Sign Up</h1>
 
-		    {{ Form::openGroup('username', 'Username:') }}
-		        {{ Form::text('username', null, array('placeholder' => 'AwesomeUsername55' )) }}
-		    {{ Form::closeGroup() }}
+			@if($errors->has())
+				<div class="ui error message">
+					<div class="header">There where some errors while submitting your information</div>
+					
+					<ul class="list">
+					@foreach($errors->all() as $error)
+						<li>{{ $error }}</li>
+					@endforeach
+					</ul>
+				</div>
+			@endif
 
-		    {{ Form::openGroup('pass1', 'Password:') }}
-		        {{ Form::password('pass1') }}
-		    {{ Form::closeGroup() }}
+			{{ Form::open([ 'route' => 'postCreate' ]) }}
 
-		    {{ Form::openGroup('pass2', 'Confirm Password:') }}
-		        {{ Form::password('pass2') }}
-		    {{ Form::closeGroup() }}
+				<div class="field{{ ($errors->has('username')) ? ' error' : '' }}">
+					<label for="username">Username: </label>
+					{{ Form::text('username', null, array('placeholder' => 'AwesomeUsername55' )) }}
+				</div>
 
-		    <p>{{ Form::submit('Register', array('class' => 'btn btn-warning btn-lg')) }}</p>
+				<div class="field{{ ($errors->has('pass1')) ? ' error' : '' }}">
+					<label for="pass1">Password: </label>
+					{{ Form::password('pass1') }}
+				</div>
 
-		{{ Form::close() }}
+				<div class="field{{ ($errors->has('pass2')) ? ' error' : '' }}">
+					<label for="pass2">Confirm Password: </label>
+					{{ Form::password('pass2') }}
+				</div>
 
+			    <p>{{ Form::submit('Sign Up', array('class' => 'ui button blue')) }}</p>
+
+			{{ Form::close() }}
+
+		</div>
 	</div>
-
 
 @stop

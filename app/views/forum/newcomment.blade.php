@@ -2,7 +2,7 @@
 
 @section('head')
 	@parent
-	<title>Edit: {{ $thread->title }}</title>
+	<title>Post a reply</title>
 @stop
 
 @section('content')
@@ -10,16 +10,18 @@
 	<div class="ui breadcrumb segment" style="width: 100%;">
 		<a href="{{ URL::route('forum-home') }}" class="section">Forum</a>
 		<i class="right chevron icon divider"></i>
-		<a href="{{ URL::route('forum-category', $thread->category->slug) }}" class="section">{{ $thread->category->title }}</a>
+		<a href="{{ URL::route('forum-category', $topic->category->slug) }}" class="section">{{ $topic->category->title }}</a>
 		<i class="right chevron icon divider"></i>
-		<a href="{{ URL::route('forum-sub-category', $thread->subcategory->slug) }}" class="section">{{ $thread->subcategory->title }}</a>
+		<a href="{{ URL::route('forum-sub-category', $topic->subcategory->slug) }}" class="section">{{ $topic->subcategory->title }}</a>
 		<i class="right chevron icon divider"></i>
-		<div class="active section">Edit &raquo; {{ $thread->title }}</div>
+		<a href="{{ URL::route('forum-thread', $topic->slug) }}" class="section">{{ $topic->title }}</a>
+		<i class="right chevron icon divider"></i>
+		<div class="active section">New Reply</div>
 	</div>
 </div>
 <div class="sixteen wide column">
 	<div class="ui column form{{ ($errors->has()) ? ' error' : '' }}">
-		<h1>Edit &raquo; {{ $thread->title }}</h1>
+		<h1>Reply &raquo; {{ $topic->title }}</h1>
 
 		@if($errors->has())
 			<div class="ui error message">
@@ -33,11 +35,11 @@
 			</div>
 		@endif
 
-		{{ Form::model($thread, array('route' => array('forum-edit-thread', $thread->slug), 'id' => 'postform')) }}    
+		{{ Form::open(array('route' => array('forum-store-comment', $topic->slug), 'id' => 'postform')) }}
 
 			<div class="field{{ ($errors->has('title')) ? ' error' : '' }}">
 				<label for="username">Subject: </label>
-				{{ Form::text('title') }}
+				{{ Form::text('title', 'Re: '.$topic->title) }}
 			</div>
 
 			<div class="btn-toolbar" style="margin-bottom: 5px;">
@@ -86,12 +88,13 @@
 				{{ Form::textarea('body', null, array('rows' => '5')) }}
 			</div>
 
-		    <p>{{ Form::submit('Save Topic', array('class' => 'ui button green')) }}</p>
+		    <p>{{ Form::submit('Post Reply', array('class' => 'ui button teal')) }}</p>
 
 		{{ Form::close() }}
 
 	</div>
 </div>
+
 @stop
 
 @section('javascript')

@@ -7,8 +7,8 @@
 	"require": {
 		"laravel/framework": "4.2.*",
 		"golonka/bbcodeparser": "1.3",
-		"manavo/laravel-bootstrap-forms": "~0.0",
-		"nesbot/carbon": "~1.13"
+		"nesbot/carbon": "~1.13",
+		"cviebrock/eloquent-sluggable": "~2.0"
 	},
 	"autoload": {
 		"classmap": [

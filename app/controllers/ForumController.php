@@ -9,12 +9,11 @@ class ForumController extends BaseController {
 	 */
 	public function index()
 	{
-		$groups = ForumGroup::all();
 		$categories = ForumCategory::all();
+		$subcategories = ForumSubCategory::all();
 		
-		return View::make('forum.index')->with('groups', $groups)->with('categories', $categories);
+		return View::make('forum.index')->with('categories', $categories)->with('subcategories', $subcategories);
 	}
-
 
 	/**
 	 * Show a category.
@@ -22,31 +21,48 @@ class ForumController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function category($id)
+	public function category($slug)
 	{
-		$category = ForumCategory::find($id);
+		$category = ForumCategory::findBySlug($slug);
 		if($category == null)
-			return Redirect::route('forum-home')->with('fail', 'That category doesn\'t exist');
+			return Redirect::route('forum-home')->with('fail', "That category doesn't exist");
 		
-		$threads = $category->threads()->get();
-		return View::make('forum.category')->with('category', $category)->with('threads', $threads);
+		$subcategories = $category->subcategories()->get();
+		return View::make('forum.category')->with('category', $category)->with('subcategories', $subcategories);
 	}
 
 
 	/**
-	 * Show a thread.
+	 * Show a subcategory.
 	 *
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function thread($id)
+	public function subcategory($slug)
 	{
-		$thread = ForumThread::find($id);
-		if($thread == null)
-			return Redirect::route('forum-home')->with('fail', "That thread doesn't exist.");
+		$subcategory = ForumSubCategory::findBySlug($slug);
+		if($subcategory == null)
+			return Redirect::route('forum-home')->with('fail', "That subcategory doesn't exist");
+		
+		$threads = $subcategory->threads()->get();
+		return View::make('forum.subcategory')->with('subcategory', $subcategory)->with('threads', $threads);
+	}
 
-		$author = $thread->author()->first()->username;
-		return View::make('forum.thread')->with('thread', $thread)->with('author', $author);
+
+	/**
+	 * Show a topic.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function topic($slug)
+	{
+		$topic = ForumThread::findBySlug($slug);
+		if($topic == null)
+			return Redirect::route('forum-home')->with('fail', "That topic doesn't exist.");
+
+		$author = $topic->author()->first()->username;
+		return View::make('forum.thread')->with('thread', $topic)->with('author', $author);
 	}
 
 	/**
@@ -57,14 +73,14 @@ class ForumController extends BaseController {
 	public function storeGroup()
 	{
 		$validate = Validator::make(Input::all(), array(
-			'group_name' => 'required|unique:forum_groups,title'
+			'group_name' => 'required|unique:forum_categories,title'
 		));
 
 		if($validate->fails())
-			return Redirect::route('forum-home')->withInput()->withErrors($validate)->with('modal', '#group_modal');
+			return Redirect::route('forum-home')->withInput()->withErrors($validate)->with('adderror', '#group_modal');
 		else
 		{
-			$group = new ForumGroup;
+			$group = new ForumCategory;
 			$group->title = Input::get('group_name');
 			$group->author_id = Auth::user()->id;
 
@@ -145,29 +161,30 @@ class ForumController extends BaseController {
 			return Redirect::route('forum-home')->with('fail', 'An error occured while deleting the group.');
 	}
 
-	public function storeCategory($id)
+	public function storeCategory($slug)
 	{
+		$category = ForumCategory::findBySlug($slug);
+			if($category == null)
+				return Redirect::route('forum-home')->with('fail', "That category doesn't exist");
+
 		$validate = Validator::make(Input::all(), array(
-			'category_name' => 'required|unique:forum_categories,title'
+			'category_name' => 'required'
 		));
 
 		if($validate->fails())
-			return Redirect::route('forum-home')->withInput()->withErrors($validate)->with('category-modal', '#category_modal')->with('group-id', $id);
+			return Redirect::route('forum-category', $category->slug)->withInput()->withErrors($validate)->with('adderror', '#dummydata');
 		else
 		{
-			$group = ForumGroup::find($id);
-			if($group == null)
-				return Redirect::route('forum-home')->with('fail', 'That group doesn\'t exist');
 
-			$category = new ForumCategory;
-			$category->title = Input::get('category_name');
-			$category->author_id = Auth::user()->id;
-			$category->group_id = $id;
+			$subcategory = new ForumSubCategory;
+			$subcategory->title = Input::get('category_name');
+			$subcategory->author_id = Auth::user()->id;
+			$subcategory->group_id = $category->id;
 
-			if($category->save())
-				return Redirect::route('forum-home')->with('success', 'The category was created.');
+			if($subcategory->save())
+				return Redirect::route('forum-category', $category->slug)->with('success', 'The subcategory was created.');
 			else
-				return Redirect::route('forum-home')->with('fail', 'An error occured while saving the new category. Please try again.');		}
+				return Redirect::route('forum-category', $category->slug)->with('fail', 'An error occured while saving the new subcategory. Please try again.');		}
 	}
 
 	public function editCategory($id)
@@ -230,17 +247,17 @@ class ForumController extends BaseController {
 			return Redirect::route('forum-home')->with('fail', 'An error occured while deleting the category.');
 	}
 
-	public function newThread($id)
+	public function newThread($slug)
 	{
-		$category = ForumCategory::find($id);
-		return View::make('forum.newthread')->with('id', $id)->with('category', $category);
+		$subcategory = ForumSubCategory::findBySlug($slug);
+		return View::make('forum.newthread')->with('subcategory', $subcategory);
 	}
 
-	public function storeThread($id)
+	public function storeThread($slug)
 	{
-		$category = ForumCategory::find($id);
-		if($category == null)
-			return Redirect::route('forum-get-new-thread')->with('fail', 'You posted to an invalid category.');
+		$subcategory = ForumSubCategory::findBySlug($slug);
+		if($subcategory == null)
+			return Redirect::route('forum-get-new-thread', $subcategory->slug)->with('fail', 'You posted to an invalid category.');
 
 		$validate = Validator::make(Input::all(), array(
 			'title' => 'required|min:3|max:225',
@@ -248,36 +265,36 @@ class ForumController extends BaseController {
 		));
 
 		if($validate->fails())
-			return Redirect::route('forum-get-new-thread', $id)->withInput()->withErrors($validate)->with('fail', 'Your input doesn\'t match the requirements.');
+			return Redirect::route('forum-get-new-thread', $subcategory->slug)->withInput()->withErrors($validate)->with('fail', 'Your input doesn\'t match the requirements.');
 		else
 		{
 			$thread = new ForumThread;
 			$thread->title = Input::get('title');
 			$thread->body = Input::get('body');
-			$thread->category_id = $id;
-			$thread->group_id = $category->group_id;
+			$thread->category_id = $subcategory->id;
+			$thread->group_id = $subcategory->group_id;
 			$thread->author_id = Auth::user()->id;
 
 			if($thread->save())
 			{
-				return Redirect::route('forum-thread', $thread->id)->with('success', 'Your thread has been saved.');
+				return Redirect::route('forum-thread', $thread->slug)->with('success', 'Your thread has been saved.');
 			}
 			else
 			{
-				return Redirect::route('forum-get-new-thread', $id)->with('fail', 'An error occured while saving your thread.')->withInput();
+				return Redirect::route('forum-get-new-thread', $subcategory->slug)->with('fail', 'An error occured while saving your thread.')->withInput();
 			}
 		}
 	}
 
-	public function editThread($id)
+	public function editThread($slug)
 	{
-		$thread = ForumThread::find($id);
+		$thread = ForumThread::findBySlug($slug);
 		if($thread == null)
 				return Redirect::route('forum-home')->with('fail', 'The thread you are trying to edit does not exist!');
 		if(Auth::user()->id == $thread->author_id || Auth::user()->isAdmin())
 		{
 			if(Request::isMethod('get'))
-				return View::make('forum.editthread')->with('thread', ForumThread::find($id));
+				return View::make('forum.editthread')->with('thread', $thread);
 
 			elseif(Request::isMethod('post'))
 			{
@@ -287,7 +304,7 @@ class ForumController extends BaseController {
 				));
 
 				if($validate->fails())
-					return Redirect::route('forum-edit-thread', $id)->withInput()->withErrors($validate)->with('fail', 'Your input doesn\'t match the requirements.');
+					return Redirect::route('forum-edit-thread', $thread->slug)->withInput()->withErrors($validate)->with('fail', 'Your input doesn\'t match the requirements.');
 				else
 				{
 					$thread->title = Input::get('title');
@@ -295,89 +312,147 @@ class ForumController extends BaseController {
 
 					if($thread->save())
 					{
-						return Redirect::route('forum-thread', $thread->id)->with('success', 'Your thread has been saved.');
+						return Redirect::route('forum-thread', $thread->slug)->with('success', 'Your thread has been saved.');
 					}
 					else
 					{
-						return Redirect::route('forum-edit-thread', $id)->with('fail', 'An error occured while saving your thread.')->withInput();
+						return Redirect::route('forum-edit-thread', $thread->slug)->with('fail', 'An error occured while saving your thread.')->withInput();
 					}
 				}
 			}
 		}
 		else
-			return Redirect::route('forum-thread', $id)->with('fail', 'You do not own this thread! If you beleave this is a server error contact one of the Staff Members.');
+			return Redirect::route('forum-thread', $thead->slug)->with('fail', 'You do not own this thread! If you beleave this is a server error contact one of the Staff Members.');
 	}
 
-	public function deleteThread($id)
+	public function deleteThread($slug)
 	{
-		$thread = ForumThread::find($id);
+		$thread = ForumThread::findBySlug($slug);
 		if($thread == null)
 			Redirect::route('forum-home')->with('fail', "That thread doesn't exist");
 		
 		if(Auth::user()->id == $thread->author_id || Auth::user()->isAdmin())
 		{
-			$category_id = $thread->category_id;
+			$category_slug = $thread->subcategory->slug;
 			$comments = $thread->comments;
 			if($comments->count() > 0)
 			{
 				if($comments->delete() && $thread->delete())
-					return Redirect::route('forum-category', $category_id)->with('success', "The thread has been deleted.");
+					return Redirect::route('forum-category', $category_slug)->with('success', "The thread has been deleted.");
 				else
-					return Redirect::route('forum-category', $category_id)->with('fail', "An error occured while deleting the thread.");
+					return Redirect::route('forum-category', $category_slug)->with('fail', "An error occured while deleting the thread.");
 			}
 			else
 			{
 				if($thread->delete())
-					return Redirect::route('forum-category', $category_id)->with('success', "The thread has been deleted.");
+					return Redirect::route('forum-category', $category_slug)->with('success', "The thread has been deleted.");
 				else
-					return Redirect::route('forum-category', $category_id)->with('fail', "An error occured while deleting the thread.");
+					return Redirect::route('forum-category', $category_slug)->with('fail', "An error occured while deleting the thread.");
 			}
 		}
 		else
-			return Redirect::route('forum-thread', $id)->with('fail', 'You do not own this thread! If you beleave this is a server error contact one of the Staff Members.');
+			return Redirect::route('forum-thread', $thread->slug)->with('fail', 'You do not own this thread! If you beleave this is a server error contact one of the Staff Members.');
 	}
 
-	public function storeComment($id)
+	public function nedReply($slug)
 	{
-		$thread = ForumThread::find($id);
-		if($thread == null)
-			return Redirect::route('forum-home')->with('fail', "That thread does't exist.");
-		
-		$validate = Validator::make(Input::all(), array(
-			'body' => 'required|min:5'
-		));
+		$topic = ForumThread::findBySlug($slug);
+		if($topic == null)
+			return Redirect::route('forum-home')->with('fail', "That topic does't exist.");
 
-		if($validate->fails())
+		if(Input::get('edit')) //We got a edit request so let's load the edit view
 		{
-			return Redirect::route('forum-thread', $id)->withInput()->withErrors($validate)->with('fail', "Please fill in the form correctly!");
-		}
-		else
-		{
-			$comment = new ForumComment();
-			$comment->body = Input::get('body');
-			$comment->author_id = Auth::user()->id;
-			$comment->thread_id = $id;
-			$comment->category_id = $thread->category->id;
-			$comment->group_id = $thread->group->id;
+			$reply = ForumComment::find(Input::get('edit'));
+			if($reply == null)
+					return Redirect::route('forum-home')->with('fail', 'The comment you are trying to edit does not exist!');
 
-			if($comment->save())
-				return Redirect::route('forum-thread', $id)->with('success', "Your comment is saved successfully.");
+			if(Auth::user()->id == $reply->author_id || Auth::user()->isAdmin())
+				return View::make('forum.editcomment')->with('reply', $reply);
 			else
-				return Redirect::route('forum-thread', $id)->with('fail', "An error occured while saving your comment. Please try again!");
+				return Redirect::route('forum-thread', $topic->id)->with('fail', 'You do not own this comment! If you beleave this is a server error contact one of the Staff Members.');
 		}
+		elseif(Input::get('delete')) //We got a delete request so let's delete it
+		{
+			$reply = ForumComment::find(Input::get('delete'));
+			if($reply == null)
+				return Redirect::route('forum-home')->with('fail', 'The comment you are trying to edit does not exist!');
+			
+			if(Auth::user()->id == $reply->author_id || Auth::user()->isAdmin())
+			{
+				if($reply->delete())
+					return Redirect::route('forum-thread', $topic->slug)->with('info', "The comment is deleted.");
+				else
+					return Redirect::route('forum-thread', $topic->slug)->with('fail', "An error occured while deleting the comment!");
+			}
+			else
+				return Redirect::route('forum-thread', $topic->slug)->with('fail', 'You do not own this comment! If you beleave this is a server error contact one of the Staff Members.');
+		}
+		else //We didn't got a edit or delete request so load the new comment view
+			return View::make('forum.newcomment')->with('topic', $topic);
 	}
 
-	public function deleteComment($id)
+	public function storeReply($slug)
 	{
-		$comment = ForumComment::find($id);
-		if($comment == null)	
-			return Redirect::route('forum-home')->with('fail', "That comment does't exist.");
-		
-		$threadid = $comment->thread->id;
-		if($comment->delete())
-			return Redirect::route('forum-thread', $threadid)->with('info', "The comment is deleted.");
-		else
-			return Redirect::route('forum-thread', $threadid)->with('fail', "An error occured while deleting the comment!");
+		$topic = ForumThread::findBySlug($slug);
+		if($topic == null)
+			return Redirect::route('forum-home')->with('fail', "That topic does't exist.");
+	
+		if(Input::get('edit')) //We got a edit request so lets edit the requested comment
+		{
+			$reply = ForumComment::find(Input::get('edit'));
+			if($reply == null)
+					return Redirect::route('forum-home')->with('fail', 'The comment you are trying to edit does not exist!');
+
+			elseif(Auth::user()->id == $reply->author_id || Auth::user()->isAdmin())
+			{
+				$validate = Validator::make(Input::all(), array(
+					'body' => 'required|min:10|max:65000'
+				));
+
+				if($validate->fails())
+					return Redirect::action('ForumController@nedReply', array('edit' => Input::get('edit')))->withInput()->withErrors($validate);
+				else
+				{
+					$reply->body = Input::get('body');
+
+					if($reply->save())
+					{
+						return Redirect::route('forum-thread', $topic->slug)->with('success', 'Your comment has been saved.');
+					}
+					else
+					{
+						return Redirect::action('ForumController@nedReply', array('edit' => Input::get('edit')))->withInput();
+					}
+				}
+			}
+			else
+				return Redirect::route('forum-thread', $topic->slug)->with('fail', 'You do not own this comment! If you beleave this is a server error contact one of the Staff Members.');
+		}
+		else //We didn't got a edit request so store a new comment
+		{	
+			$validate = Validator::make(Input::all(), array(
+				'body' => 'required|min:5'
+			));
+
+			if($validate->fails())
+			{
+				return Redirect::route('forum-new-comment', $slug)->withInput()->withErrors($validate)->with('fail', "Please fill in the form correctly!");
+			}
+			else
+			{
+				$comment = new ForumComment();
+				$comment->body = Input::get('body');
+				$comment->author_id = Auth::user()->id;
+				$comment->thread_id = $topic->id;
+				$comment->category_id = $topic->subcategory->id;
+				$comment->group_id = $topic->category->id;
+
+				if($comment->save())
+					return Redirect::route('forum-thread', $topic->slug)->with('success', "Your comment is saved successfully.");
+				else
+					return Redirect::route('forum-thread', $topic->slug)->with('fail', "An error occured while saving your comment. Please try again!");
+			}
+		}
 	}
 
 	public function editComment($id)

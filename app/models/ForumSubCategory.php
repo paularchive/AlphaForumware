@@ -3,7 +3,7 @@
 use Cviebrock\EloquentSluggable\SluggableInterface;
 use Cviebrock\EloquentSluggable\SluggableTrait;
 
-class ForumThread extends BaseModel implements SluggableInterface
+class ForumSubCategory extends BaseModel implements SluggableInterface
 {
 	use SluggableTrait;
 
@@ -12,25 +12,20 @@ class ForumThread extends BaseModel implements SluggableInterface
         'save_to'    => 'slug',
     );
 
-	protected $table = 'forum_threads';
+	protected $table = 'forum_subcategories';
 
 	public function category()
 	{
 		return $this->belongsTo('ForumCategory', 'group_id');
 	}
 
-	public function subcategory()
+	public function threads()
 	{
-		return $this->belongsTo('ForumSubCategory', 'category_id');
+		return $this->hasMany('ForumThread', 'category_id');
 	}
 
 	public function comments()
 	{
-		return $this->hasMany('ForumComment', 'thread_id');
-	}
-
-	public function author()
-	{
-		return $this->belongsTo('User', 'author_id');
+		return $this->hasMany('ForumComment', 'category_id');
 	}
 }
