@@ -13,7 +13,7 @@
 	h1 {
 		text-align: center;
 	}
-	p {
+	#submitbtn {
 		text-align: center;
 	}
 	@media (min-width: 768px) {
@@ -63,7 +63,7 @@
 					</div>
 				</div>
 
-			    <p>{{ Form::submit('Log In', array('class' => 'ui button blue')) }}</p>
+			    <p id="submitbtn">{{ Form::submit('Log In', array('class' => 'ui button blue')) }}</p>
 
 			{{ Form::close() }}
 

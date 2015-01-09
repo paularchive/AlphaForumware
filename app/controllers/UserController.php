@@ -59,13 +59,18 @@ class UserController extends BaseController {
 			$user->username = Input::get('username');
 			$user->password = Hash::make(Input::get('pass1'));
 
+			$redirect = Session::get('loginRedirect', 'home');
+
 			if($user->save())
 			{
-				return Redirect::route('home')->with('success', 'You registered successfully. You can now log in.');
+				// Unset the page we were before from the session
+    			Session::forget('loginRedirect');
+
+				return Redirect::to($redirect)->with('message', true)->with('msg.type', 'success')->with('msg.header', "Your registration was successful.")->with('msg.message', "You may now log-in with the username you have chosen.");
 			}
 			else
 			{
-				return Redirect::route('home')->with('fail', 'An error occured while creating the user. Please try again.');
+				return Redirect::route('getCreate')->with('message', true)->with('msg.type', 'negative')->with('msg.header', "An error occured while creating your account.")->with('msg.message', "Please contact an Administrator or try it again.");
 			}
 		}
 	}
@@ -77,6 +82,7 @@ class UserController extends BaseController {
 	 */
 	public function postLogin()
 	{
+
 		$rules = array(
 			'username' => 'required',
 			'pass1' => 'required',
@@ -102,13 +108,18 @@ class UserController extends BaseController {
 				'password' => Input::get('pass1')
 			), $remember);
 
+			$redirect = Session::get('loginRedirect', 'home');
+
 			if($auth)
 			{
-				return Redirect::intended('/')->with('info', 'You are now logged in.');
+    			// Unset the page we were before from the session
+    			Session::forget('loginRedirect');
+
+				return Redirect::to($redirect)->with('message', true)->with('msg.type', 'success')->with('msg.header', "You have logged-in successfully.")->with('msg.message', "You can now post replies and make new topics if you want.");
 			}
 			else
 			{
-				return Redirect::route('getLogin')->with('fail', 'You entered the wrong login credentials. Please try again.');
+				return Redirect::route('getLogin')->with('message', true)->with('msg.type', 'negative')->with('msg.header', "You entered the wrong login credentials.")->with('msg.message', "Please check your username and password, and then try it again.");
 			}
 		}
 	}
@@ -116,7 +127,11 @@ class UserController extends BaseController {
 	public function getLogout()
 	{
 		Auth::logout();
-		return Redirect::route('home')->with('info', 'You are no longer logged in.');
+		$redirect = Session::get('loginRedirect', 'home');
+		// Unset the page we were before from the session
+    	Session::forget('loginRedirect');
+
+		return Redirect::to($redirect)->with('message', true)->with('msg.type', 'warning')->with('msg.header', "You have logged-out successfully.")->with('msg.message', "You can no longer post replies or topics, but you will still be able to browse on the forum.");
 	}
 
 }

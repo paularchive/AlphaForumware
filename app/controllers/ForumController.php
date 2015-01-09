@@ -11,6 +11,8 @@ class ForumController extends BaseController {
 	{
 		$categories = ForumCategory::all();
 		$subcategories = ForumSubCategory::all();
+
+		Session::put('loginRedirect', Request::url());
 		
 		return View::make('forum.index')->with('categories', $categories)->with('subcategories', $subcategories);
 	}
@@ -26,6 +28,8 @@ class ForumController extends BaseController {
 		$category = ForumCategory::findBySlug($slug);
 		if($category == null)
 			return Redirect::route('forum-home')->with('fail', "That category doesn't exist");
+
+		Session::put('loginRedirect', Request::url());
 		
 		$subcategories = $category->subcategories()->get();
 		return View::make('forum.category')->with('category', $category)->with('subcategories', $subcategories);
@@ -43,6 +47,8 @@ class ForumController extends BaseController {
 		$subcategory = ForumSubCategory::findBySlug($slug);
 		if($subcategory == null)
 			return Redirect::route('forum-home')->with('fail', "That subcategory doesn't exist");
+
+		Session::put('loginRedirect', Request::url());
 		
 		$threads = $subcategory->threads()->get();
 		return View::make('forum.subcategory')->with('subcategory', $subcategory)->with('threads', $threads);
@@ -60,6 +66,8 @@ class ForumController extends BaseController {
 		$topic = ForumThread::findBySlug($slug);
 		if($topic == null)
 			return Redirect::route('forum-home')->with('fail', "That topic doesn't exist.");
+
+		Session::put('loginRedirect', Request::url());
 
 		$author = $topic->author()->first()->username;
 		return View::make('forum.thread')->with('thread', $topic)->with('author', $author);
@@ -250,6 +258,9 @@ class ForumController extends BaseController {
 	public function newThread($slug)
 	{
 		$subcategory = ForumSubCategory::findBySlug($slug);
+
+		Session::put('loginRedirect', Request::url());
+
 		return View::make('forum.newthread')->with('subcategory', $subcategory);
 	}
 
@@ -291,9 +302,13 @@ class ForumController extends BaseController {
 		$thread = ForumThread::findBySlug($slug);
 		if($thread == null)
 				return Redirect::route('forum-home')->with('fail', 'The thread you are trying to edit does not exist!');
+
+		Session::put('loginRedirect', Request::url());
+
 		if(Auth::user()->id == $thread->author_id || Auth::user()->isAdmin())
 		{
 			if(Request::isMethod('get'))
+
 				return View::make('forum.editthread')->with('thread', $thread);
 
 			elseif(Request::isMethod('post'))
@@ -365,6 +380,8 @@ class ForumController extends BaseController {
 			$reply = ForumComment::find(Input::get('edit'));
 			if($reply == null)
 					return Redirect::route('forum-home')->with('fail', 'The comment you are trying to edit does not exist!');
+
+			Session::put('loginRedirect', Request::url());
 
 			if(Auth::user()->id == $reply->author_id || Auth::user()->isAdmin())
 				return View::make('forum.editcomment')->with('reply', $reply);

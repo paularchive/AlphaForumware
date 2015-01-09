@@ -17,6 +17,8 @@ class HomeController extends BaseController {
 
 	public function hello()
 	{
+		Session::put('loginRedirect', Request::url());
+		
 		return View::make('hello');
 	}
 
