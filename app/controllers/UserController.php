@@ -83,7 +83,7 @@ class UserController extends BaseController {
 		);
 
 		$messages = array(
-			'username.required' => 'Your username is required to login',
+			'username.required' => 'Your username is required to login!',
 			'pass1.required' => 'Your password is required to login!'
 		);
 

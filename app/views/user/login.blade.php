@@ -55,6 +55,13 @@
 					<label for="pass1">Password: </label>
 					{{ Form::password('pass1') }}
 				</div>
+				
+				<div class="inline field">
+					<div class="ui checkbox">
+						{{ Form::checkbox('remember'); }}
+						<label>Remember me</label>
+					</div>
+				</div>
 
 			    <p>{{ Form::submit('Log In', array('class' => 'ui button blue')) }}</p>
 
@@ -62,4 +69,13 @@
 
 		</div>
 	</div>
+@stop
+
+@section('javascript')
+	@parent
+	<script type="text/javascript">
+		$('.ui.checkbox').each(function() {
+			$(this).checkbox();
+		});
+	</script>
 @stop

@@ -11,7 +11,7 @@ class ForumComment extends BaseModel
 
 	public function subcategory()
 	{
-		return $this->belongsTo('ForumSubCategory', 'thread_id');
+		return $this->belongsTo('ForumSubCategory', 'category_id');
 	}
 
 	public function thread()
