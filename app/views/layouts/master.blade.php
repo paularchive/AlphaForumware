@@ -49,12 +49,19 @@
 	</div>
 
 	<main class="ui page grid">
-		@if(Session::has('success'))
-			<div class="alert alert-success">{{ Session::get('success') }}</div>
-		@elseif(Session::has('info'))
-			<div class="alert alert-info">{{ Session::get('info') }}</div>
-		@elseif(Session::has('fail'))
-			<div class="alert alert-danger">{{ Session::get('fail') }}</div>
+		<div class="sixteen wide column">
+
+		</div>
+
+		@if(Session::has('message'))
+		<div class="sixteen wide column">
+			<div class="ui{{ (Session::has('msg.type')) ? ' '.Session::get('msg.type').' ' : ' ' }} message">
+				<div class="content">
+					<div class="header">{{ Session::get('msg.header') }}</div>
+					<p>{{ Session::get('msg.message') }}</p>
+				</div>
+			</div>
+		</div>
 		@endif
 
 		@yield('content')
@@ -73,6 +80,7 @@
 	{
 		$(this).delay(10000).fadeOut('fast', function() {$(this).remove();});
 	});
+	console.log('{{ Session::get('loginRedirect') }}');
 	</script>
 	@show
 </body>
