@@ -49,13 +49,9 @@
 	</div>
 
 	<main class="ui page grid">
-		<div class="sixteen wide column">
-
-		</div>
-
 		@if(Session::has('message'))
-		<div class="sixteen wide column">
-			<div class="ui{{ (Session::has('msg.type')) ? ' '.Session::get('msg.type').' ' : ' ' }} message">
+		<div class="sixteen wide column" style="padding:0;">
+			<div class="ui{{ (Session::has('msg.type')) ? ' '.Session::get('msg.type').' ' : ' ' }} message msg">
 				<div class="content">
 					<div class="header">{{ Session::get('msg.header') }}</div>
 					<p>{{ Session::get('msg.message') }}</p>
@@ -76,9 +72,17 @@
 	});
 	</script>
 	<script type="text/javascript">
-	$('.alert').each(function()
+	$('.msg').each(function()
 	{
-		$(this).delay(10000).fadeOut('fast', function() {$(this).remove();});
+		var messagebox = $(this)
+		setTimeout(function() {
+      		messagebox.transition({
+			    animation  : 'fade down',
+			    onComplete : function() {
+			    	messagebox.parent().remove();
+			    }
+			});
+		}, 5000);
 	});
 	console.log('{{ Session::get('loginRedirect') }}');
 	</script>
