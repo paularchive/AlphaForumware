@@ -25,9 +25,9 @@
 				<i class="comments icon"></i> Forum
 			</a>1
 			<div class="right menu">
-				@if(Auth::check())
+				@if(Sentry::check())
 				<div class="ui dropdown item" data-trigger="hover">
-					{{ Auth::user()->username }} <i class="dropdown icon"></i>
+					{{ Sentry::getUser()->username }} <i class="dropdown icon"></i>
 					<div class="menu">
 						<div class="header">
 					    	<i class="fa fa-user"></i> 
