@@ -405,6 +405,9 @@ class ForumController extends BaseController {
 				return Redirect::route('forum-thread', $topic->slug)->with('fail', 'You do not own this comment! If you beleave this is a server error contact one of the Staff Members.');
 		}
 		else //We didn't got a edit or delete request so load the new comment view
+
+			Session::put('loginRedirect', Request::url());
+
 			return View::make('forum.newcomment')->with('topic', $topic);
 	}
 

@@ -18,7 +18,6 @@
 	</div>
 </div>
 
-@if(Auth::check())
 <div class="row">
 	<div class="six wide column">
 		<a href="{{ URL::route('forum-new-comment', $thread->slug) }}" class="ui vertical animated teal button">
@@ -28,17 +27,18 @@
 			</div>
 		</a>
 	</div>
-	@if(Auth::user()->isAdmin() || Auth::user()->id == $thread->author_id)
-	<div class="right aligned ten wide column">
-		<div class="ui buttons">
-			<a href="{{ URL::route('forum-edit-thread', $thread->slug) }}" class="ui button">Edit</a>
-			<div class="or"></div>
-			<div class="ui negative button">Delete</div>
+	@if(Auth::check())
+		@if(Auth::user()->isAdmin() || Auth::user()->id == $thread->author_id)
+		<div class="right aligned ten wide column">
+			<div class="ui buttons">
+				<a href="{{ URL::route('forum-edit-thread', $thread->slug) }}" class="ui button">Edit</a>
+				<div class="or"></div>
+				<div class="ui negative button">Delete</div>
+			</div>
 		</div>
-	</div>
+		@endif
 	@endif
 </div>
-@endif
 
 <div class="sixteen wide column">
 	<div class="ui top attached segment thread-title">
@@ -81,7 +81,6 @@
 </div>
 @endforeach
 
-@if(Auth::check())
 <div class="sixteen wide column">
 	<a href="{{ URL::route('forum-new-comment', $thread->slug) }}" class="ui vertical animated teal button">
 		<div class="visible content">Reply</div>
@@ -90,10 +89,5 @@
 		</div>
 	</a>
 </div>
-@endif
 
-@stop
-
-@section('javascript')
-	@parent
 @stop

@@ -59,7 +59,7 @@ class UserController extends BaseController {
 			$user->username = Input::get('username');
 			$user->password = Hash::make(Input::get('pass1'));
 
-			$redirect = Session::get('loginRedirect', 'home');
+			$redirect = Session::get('loginRedirect', '/');
 
 			if($user->save())
 			{
@@ -108,7 +108,7 @@ class UserController extends BaseController {
 				'password' => Input::get('pass1')
 			), $remember);
 
-			$redirect = Session::get('loginRedirect', 'home');
+			$redirect = Session::get('loginRedirect', '/');
 
 			if($auth)
 			{
@@ -127,7 +127,7 @@ class UserController extends BaseController {
 	public function getLogout()
 	{
 		Auth::logout();
-		$redirect = Session::get('loginRedirect', 'home');
+		$redirect = Session::get('loginRedirect', '/');
 		// Unset the page we were before from the session
     	Session::forget('loginRedirect');
 
