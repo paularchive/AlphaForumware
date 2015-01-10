@@ -259,7 +259,7 @@ class ForumController extends BaseController {
 	{
 		$subcategory = ForumSubCategory::findBySlug($slug);
 
-		Session::put('loginRedirect', Request::url());
+		Session::put('loginRedirect', URL::to(route('forum-sub-category', $subcategory->slug)));
 
 		return View::make('forum.newthread')->with('subcategory', $subcategory);
 	}
@@ -303,7 +303,7 @@ class ForumController extends BaseController {
 		if($thread == null)
 				return Redirect::route('forum-home')->with('fail', 'The thread you are trying to edit does not exist!');
 
-		Session::put('loginRedirect', Request::url());
+		Session::put('loginRedirect', URL::to(route('forum-thread', $topic->slug)));
 
 		if(Auth::user()->id == $thread->author_id || Auth::user()->isAdmin())
 		{
@@ -381,7 +381,7 @@ class ForumController extends BaseController {
 			if($reply == null)
 					return Redirect::route('forum-home')->with('fail', 'The comment you are trying to edit does not exist!');
 
-			Session::put('loginRedirect', Request::url());
+			Session::put('loginRedirect', URL::to(route('forum-thread', $topic->slug)));
 
 			if(Auth::user()->id == $reply->author_id || Auth::user()->isAdmin())
 				return View::make('forum.editcomment')->with('reply', $reply);
@@ -406,7 +406,7 @@ class ForumController extends BaseController {
 		}
 		else //We didn't got a edit or delete request so load the new comment view
 
-			Session::put('loginRedirect', Request::url());
+			Session::put('loginRedirect', URL::to(route('forum-thread', $topic->slug)));
 
 			return View::make('forum.newcomment')->with('topic', $topic);
 	}
