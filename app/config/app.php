@@ -125,6 +125,7 @@ return array(
 		
 		'Golonka\BBCode\BBCodeParserServiceProvider',
 		'Cviebrock\EloquentSluggable\SluggableServiceProvider',
+		'Cartalyst\Sentry\SentryServiceProvider'
 	),
 
 	/*
@@ -193,7 +194,8 @@ return array(
 		'View'              => 'Illuminate\Support\Facades\View',
 
 		'BBCode' 			=> 'Golonka\BBCode\Facades\BBCodeParser',
-		'Carbon'			=> 'Carbon\Carbon'
+		'Carbon'			=> 'Carbon\Carbon',
+		'Sentry' 			=> 'Cartalyst\Sentry\Facades\Laravel\Sentry',
 
 	),
 

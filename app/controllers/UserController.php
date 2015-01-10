@@ -31,9 +31,9 @@ class UserController extends BaseController {
 	 */
 	public function postCreate()
 	{
-
 		$rules = array(
-			'username' => 'required|unique:users|min:4',
+			'username' => 'required|unique:users,username|min:4',
+			'email' => 'required|unique:users,email|email',
 			'pass1' => 'required|min:6',
 			'pass2' => 'required|same:pass1'
 		);
@@ -48,31 +48,35 @@ class UserController extends BaseController {
 		);
 
 		$validate = Validator::make(Input::all(), $rules, $messages);
-
 		if($validate->fails())
 		{
 			return Redirect::route('getCreate')->withErrors($validate)->withInput();
 		}
-		else
+		
+		try
 		{
-			$user = new User();
-			$user->username = Input::get('username');
-			$user->password = Hash::make(Input::get('pass1'));
+		    // Let's register a user.
+		    $user = Sentry::register(array(
+		        'username' => Input::get('username'),
+		        'email'    => Input::get('email'),
+		        'password' => Input::get('pass1'),
+		    ), true);
 
-			$redirect = Session::get('loginRedirect', '/');
+		    // Let's get the activation code
+		    $activationCode = $user->getActivationCode();
 
-			if($user->save())
-			{
-				// Unset the page we were before from the session
-    			Session::forget('loginRedirect');
-
-				return Redirect::to($redirect)->with('message', true)->with('msg.type', 'success')->with('msg.header', "Your registration was successful.")->with('msg.message', "You may now log-in with the username you have chosen.");
-			}
-			else
-			{
-				return Redirect::route('getCreate')->with('message', true)->with('msg.type', 'negative')->with('msg.header', "An error occured while creating your account.")->with('msg.message', "Please contact an Administrator or try it again.");
-			}
+		    // Send activation code to the user so he can activate the account
 		}
+		catch (Cartalyst\Sentry\Users\UserExistsException $e)
+		{
+    		return Redirect::route('getLogin')->with('message', true)->with('msg.type', 'negative')->with('msg.header', "This email has already been registered.")->with('msg.message', "It looks like you entered the wrong password! Please try it again.");
+		}
+		
+		$redirect = Session::get('loginRedirect', '/');
+		// Unset the page we were before from the session
+    	Session::forget('loginRedirect');
+
+		return Redirect::to($redirect)->with('message', true)->with('msg.type', 'success')->with('msg.header', "Your registration was successful.")->with('msg.message', "You may now log-in with the username you have chosen.");
 	}
 
 	/**
@@ -94,44 +98,71 @@ class UserController extends BaseController {
 		);
 
 		$validate = Validator::make(Input::all(), $rules, $messages);
-
 		if($validate->fails())
 		{
 			return Redirect::route('getLogin')->withErrors($validate)->withInput();
 		}
-		else
+
+		try
 		{
 			$remember = (Input::has('remember')) ? true : false;
 
-			$auth = Auth::attempt(array(
-				'username' => Input::get('username'),
-				'password' => Input::get('pass1')
-			), $remember);
+		    // Login credentials
+		    $credentials = array(
+		        'username'    => Input::get('username'),
+		        'password' => Input::get('pass1'),
+		    );
 
-			$redirect = Session::get('loginRedirect', '/');
-
-			if($auth)
-			{
-    			// Unset the page we were before from the session
-    			Session::forget('loginRedirect');
-
-				return Redirect::to($redirect)->with('message', true)->with('msg.type', 'success')->with('msg.header', "You have logged-in successfully.")->with('msg.message', "You can now post replies and make new topics if you want.");
-			}
-			else
-			{
-				return Redirect::route('getLogin')->with('message', true)->with('msg.type', 'negative')->with('msg.header', "You entered the wrong login credentials.")->with('msg.message', "Please check your username and password, and then try it again.");
-			}
+		    // Authenticate the user
+		    $user = Sentry::authenticate($credentials, $remember);
 		}
+		catch (Cartalyst\Sentry\Users\WrongPasswordException $e)
+		{
+		    return Redirect::route('getLogin')->with('message', true)->with('msg.type', 'negative')->with('msg.header', "You entered the wrong login credentials.")->with('msg.message', "It looks like you entered the wrong password! Please try it again.");
+		}
+		catch (Cartalyst\Sentry\Users\UserNotFoundException $e)
+		{
+		    return Redirect::route('getLogin')->with('message', true)->with('msg.type', 'negative')->with('msg.header', "You entered the wrong login credentials.")->with('msg.message', "It looks like that user doesn't exist! Please try it again.");
+		}
+		catch (Cartalyst\Sentry\Users\UserNotActivatedException $e)
+		{
+		    return Redirect::route('getLogin')->with('message', true)->with('msg.type', 'info')->with('msg.header', "Account isn't activated yet!")->with('msg.message', "Please check your email and activate your account.");
+		}
+		catch (Cartalyst\Sentry\Throttling\UserSuspendedException $e)
+		{
+		    return Redirect::route('getLogin')->with('message', true)->with('msg.type', 'info')->with('msg.header', "Account Suspended.")->with('msg.message', "It looks like your account has been suspended, please contact an Administrator for more info.");
+		}
+		catch (Cartalyst\Sentry\Throttling\UserBannedException $e)
+		{
+		    return Redirect::route('getLogin')->with('message', true)->with('msg.type', 'negative')->with('msg.header', "You entered the wrong login credentials.")->with('msg.message', "It looks like your account has been banned, please contact an Administrator for more info.");
+		}
+		
+		$redirect = Session::get('loginRedirect', '/');
+		// Unset the page we were before from the session
+    	Session::forget('loginRedirect');
+    	return Redirect::to($redirect)->with('message', true)->with('msg.type', 'success')->with('msg.header', "You have logged-in successfully.")->with('msg.message', "You can now post replies and make new topics if you want.");
 	}
 
 	public function getLogout()
 	{
-		Auth::logout();
+		Sentry::logout();
 		$redirect = Session::get('loginRedirect', '/');
 		// Unset the page we were before from the session
     	Session::forget('loginRedirect');
 
 		return Redirect::to($redirect)->with('message', true)->with('msg.type', 'warning')->with('msg.header', "You have logged-out successfully.")->with('msg.message', "You can no longer post replies or topics, but you will still be able to browse on the forum.");
 	}
+
+
+	/**
+	 * Load profile index
+	 *
+	 * @param int $user
+	 * @return Response
+	**/
+	/*public function profile.index($user)
+	{
+		$user = 1;
+	}*/
 
 }

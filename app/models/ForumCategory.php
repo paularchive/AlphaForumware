@@ -31,6 +31,6 @@ class ForumCategory extends BaseModel implements SluggableInterface
 
 	public function author()
 	{
-		return $this->belongsTo('User');
+		return $this->belongsTo('User', 'auhtor_id');
 	}
 }

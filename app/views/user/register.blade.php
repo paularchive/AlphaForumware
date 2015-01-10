@@ -52,6 +52,11 @@
 					{{ Form::text('username', null, array('placeholder' => 'AwesomeUsername55' )) }}
 				</div>
 
+				<div class="field{{ ($errors->has('email')) ? ' error' : '' }}">
+					<label for="email">Email: </label>
+					{{ Form::text('email', null, array('placeholder' => 'something@example.com' )) }}
+				</div>
+
 				<div class="field{{ ($errors->has('pass1')) ? ' error' : '' }}">
 					<label for="pass1">Password: </label>
 					{{ Form::password('pass1') }}

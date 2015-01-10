@@ -15,7 +15,7 @@
 	</div>
 </div>
 
-@if(Auth::check() && Auth::user()->isAdmin())
+@if(Sentry::check() && Sentry::getUser()->hasAccess('subcat.new') || Sentry::check() && Sentry::getUser()->inGroup('Admin'))
 <div class="sixteen wide column">
 	<div data-func="addsubcategory" class="ui purple button">Add subcategory</div>
 </div>

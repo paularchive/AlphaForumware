@@ -47,7 +47,7 @@ Route::filter('auth', function()
 		}
 	}*/
 
-    if (!Auth::check()) {
+    if (!Sentry::check()) {
         Session::put('loginRedirect', Request::url());
         return Redirect::route('getLogin');
 	}

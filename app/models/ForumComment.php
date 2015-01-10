@@ -21,6 +21,6 @@ class ForumComment extends BaseModel
 
 	public function author()
 	{
-		return $this->belongsTo('User');
+		return $this->belongsTo('User', 'author_id');
 	}
 }
