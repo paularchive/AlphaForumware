@@ -1,5 +1,8 @@
 ## AlphaForumware
 
+>##### I am really sorry but I made a terrible mistake with the user system.
+>The next release will fix this problem but you will need to completely reset your database.
+
 #####What is new in v2.0?
 Version 2.0 will no longer include bootstrap but Semantic UI
 And some of the functions are rewritten.
