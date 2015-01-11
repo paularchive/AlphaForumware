@@ -1,5 +1,3 @@
-## AlphaForumware
-
 ####BE AWARE THIS IS NOT PRODUCTION READY!!
 
 #####What is new in 0.2.0?
@@ -7,15 +5,9 @@ Version 0.2.0 will no longer include bootstrap but Semantic UI
 And some of the functions are rewritten.
 
 
-AlphaForumware is a forum application written in PHP. We use the Laravel PHP Framework and Semantic UI. It's possible to:
-* Register/Login
-* Create/Edit/Delete Forum Categories
-* Create/Edit/Delete Forum Sub Categories in Categories
-* Create/Edit/Delete Topics in Categories
-* Create/Edit/Delete Replies in Threads
-* Backend coming soon!
+AlphaForumware is a free to use forum application written in PHP based on the Laravel PHP Framework. Our goal is to make an easy to use/manage application with a modern UI.
 
-Dependencies
+Dependenties
 ------------
 * PHP 5.5+
 * Composer
