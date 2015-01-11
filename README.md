@@ -1,6 +1,6 @@
 ####BE AWARE THAT THIS IS THE DEV BRANCHE AND WE DO NOT RECOMMEND TO USE THIS FOR ANY PRODUCTION CONDITIONS!!
 #####What is new in 0.2.0?
-Version 0.2 will have a better manage and login system, and as you might know, v0.1 used bootstrap as main style. In this we will use Semantic UI, and alot more custom css.
+Version 0.2 will have a better manage and login system, and as you might know v0.1 used bootstrap as main style. In this version we will use Semantic UI as main style and we will also make some more custom css.
 
 AlphaForumware is a free to use forum application written in PHP based on the Laravel PHP Framework. Our goal is to make an easy to use/manage application with a modern UI.
 
