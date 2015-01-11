@@ -1,5 +1,7 @@
 ## AlphaForumware
 
+####BE AWARE THIS IS NOT PRODUCTION READY!!
+
 #####What is new in 0.2.0?
 Version 0.2.0 will no longer include bootstrap but Semantic UI
 And some of the functions are rewritten.
