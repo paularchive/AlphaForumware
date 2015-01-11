@@ -1,9 +1,6 @@
-####BE AWARE THIS IS NOT PRODUCTION READY!!
-
+####BE AWARE THAT THIS IS THE DEV BRANCHE AND WE DO NOT RECOMMEND TO USE THIS FOR ANY PRODUCTION CONDITIONS!!
 #####What is new in 0.2.0?
-Version 0.2.0 will no longer include bootstrap but Semantic UI
-And some of the functions are rewritten.
-
+Version 0.2 will have a better manage and login system, and as you might know, v0.1 used bootstrap as main style. In this we will use Semantic UI, and alot more custom css.
 
 AlphaForumware is a free to use forum application written in PHP based on the Laravel PHP Framework. Our goal is to make an easy to use/manage application with a modern UI.
 
@@ -16,7 +13,7 @@ Dependenties
 
 Installation
 ------------
-AlphaForumware is build in the Laravel PHP Framework so you have to do some standard things to get it to work:
+It is not recommended to use this application for production conditions, but you can still test it out. To do that you will have to do some things to configure the application, this is all you have to do:
 * Install composer on your computer (documentation coming soon)
 * Open a Terminal or CommandPrompt in the AlphaForumware root folder and enter `composer install` this will install laravel and some other dependencies. (can take a while)
 * When that is done you have to go to the folder app and rename `config-sample` to `config` and enter that folder, now change your database settings in `database.php`
