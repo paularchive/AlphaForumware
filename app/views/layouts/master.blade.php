@@ -35,13 +35,13 @@
 					    </div>
 					    <div class="divider"></div>
 						<a class="item">Edit Profile</a>
-						<a href="{{ URL::route('getLogout') }}" class="item">Logout</a>
+						<a href="{{ URL::route('user.logout') }}" class="item">Logout</a>
 					</div>
 				</div>
 				@else
 				<div class="item">
-					<a href="{{ URL::route('getCreate') }}" class="ui primary button{{ HTML::menu_active('user/create') }}">Sign Up</a>
-					<a href="{{ URL::route('getLogin') }}" class="ui button{{ HTML::menu_active('user/login') }}">Log In</a>
+					<a href="{{ URL::route('user.register') }}" class="ui primary button{{ HTML::menu_active('user/create') }}">Sign Up</a>
+					<a href="{{ URL::route('user.login') }}" class="ui button{{ HTML::menu_active('user/login') }}">Log In</a>
 				</div>
 				@endif
 			</div>

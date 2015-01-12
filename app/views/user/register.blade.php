@@ -45,7 +45,7 @@
 				</div>
 			@endif
 
-			{{ Form::open([ 'route' => 'postCreate' ]) }}
+			{{ Form::open([ 'route' => 'user.register' ]) }}
 
 				<div class="field{{ ($errors->has('username')) ? ' error' : '' }}">
 					<label for="username">Username: </label>

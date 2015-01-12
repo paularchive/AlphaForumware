@@ -44,11 +44,11 @@
 				</div>
 			@endif
 
-			{{ Form::open([ 'route' => 'postLogin' ]) }}
+			{{ Form::open([ 'route' => 'user.login' ]) }}
 
-				<div class="field{{ ($errors->has('username')) ? ' error' : '' }}">
-					<label for="username">Username: </label>
-					{{ Form::text('username', null, array('placeholder' => 'AwesomeUsername55' )) }}
+				<div class="field{{ ($errors->has('email')) ? ' error' : '' }}">
+					<label for="email">Username: </label>
+					{{ Form::text('email', null, array('placeholder' => 'someone@example.com' )) }}
 				</div>
 
 				<div class="field{{ ($errors->has('pass1')) ? ' error' : '' }}">

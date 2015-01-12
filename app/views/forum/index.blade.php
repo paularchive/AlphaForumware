@@ -13,7 +13,7 @@
 	</div>
 </div>
 
-@if(Auth::check() && Auth::user()->isAdmin())
+@if(Sentry::check() && Sentry::getUser()->isSuperUser())
 	<div class="sixteen wide column">
 		<div data-func="addcategory" class="ui purple button">Add category</div>
 	</div>

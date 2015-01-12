@@ -55,7 +55,7 @@ Route::filter('auth', function()
 
 Route::filter('admin', function()
 {
-	if(!(Auth::check() && Auth::user()->isAdmin()))
+	if(!(Sentry::check() && Sentry::getUser()->isSuperUser()))
 	{
 		return Redirect::route('home');
 	}

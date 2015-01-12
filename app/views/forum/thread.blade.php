@@ -27,8 +27,8 @@
 			</div>
 		</a>
 	</div>
-	@if(Auth::check())
-		@if(Auth::user()->isAdmin() || Auth::user()->id == $thread->author_id)
+	@if(Sentry::check())
+		@if(Sentry::getUser()->isSuperUser() || Sentry::getUser()->id == $thread->author_id)
 		<div class="right aligned ten wide column">
 			<div class="ui buttons">
 				<a href="{{ URL::route('forum-edit-thread', $thread->slug) }}" class="ui button">Edit</a>

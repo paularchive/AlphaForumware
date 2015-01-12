@@ -4,6 +4,10 @@ class ForumTableSeeder extends Seeder
 {
 	public function run()
 	{
+		DB::table('forum_categories')->delete();
+		DB::table('forum_subcategories')->delete();
+		DB::table('forum_threads')->delete();
+
 		ForumCategory::create(array(
 			'title' => 'General Discussion',
 			'slug' => 'general-discussion',

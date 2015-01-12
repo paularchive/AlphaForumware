@@ -17,7 +17,7 @@
 	</div>
 </div>
 
-@if(Auth::check())
+@if(Sentry::check())
 <div class="sixteen wide column">
 	<a href="{{ URL::route('forum-get-new-thread', $subcategory->slug) }}" class="ui fade animated orange button">
 		<div class="visible content">Post a new topic</div>
