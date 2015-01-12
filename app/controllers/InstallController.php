@@ -25,7 +25,16 @@ class InstallController extends \BaseController {
 
 		elseif(Request::isMethod('post'))
 		{
-			return Input::all();
+
+			$fp = fopen(base_path()."/.env.development.php", 'w');
+    		fwrite($fp, "<?php\n");
+    		fwrite($fp, "return array(\n");
+    		fwrite($fp, "	'DATABASE_HOST'		=> '".Input::get('host')."',\n");
+    		fwrite($fp, "	'DATABASE_NAME' 	=> '".Input::get('database')."',\n");
+    		fwrite($fp, "	'DATABASE_USER' 	=> '".Input::get('username')."',\n");
+    		fwrite($fp, "	'DATABASE_PASSWORD' => '".Input::get('password')."'\n");
+    		fwrite($fp, ");");
+    		fclose($fp); 
 		}
 	}
 

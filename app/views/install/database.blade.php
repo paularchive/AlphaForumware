@@ -69,24 +69,31 @@
 				</div>
 			@endif
 
+			@if(!File::exists(base_path().'/.env.development.php'))
+				{{ $_ENV['DATABASE_HOST'] = null }}
+				{{ $_ENV['DATABASE_NAME'] = null }}
+				{{ $_ENV['DATABASE_USER'] = null }}
+				{{ $_ENV['DATABASE_PASSWORD'] = null }}
+			@endif
+
 			<div class="field{{ ($errors->has('host')) ? ' error' : '' }}">
 				<label for="host">Host: </label>
-				{{ Form::text('host', null, array('placeholder' => 'localhost' )) }}
+				{{ Form::text('host', $_ENV['DATABASE_HOST'], array('placeholder' => 'localhost' )) }}
 			</div>
 
 			<div class="field{{ ($errors->has('database')) ? ' error' : '' }}">
 				<label for="database">Database: </label>
-				{{ Form::text('database', null, array('placeholder' => 'forum' )) }}
+				{{ Form::text('database', $_ENV['DATABASE_NAME'], array('placeholder' => 'forum' )) }}
 			</div>
 
 			<div class="field{{ ($errors->has('username')) ? ' error' : '' }}">
 				<label for="username">Username: </label>
-				{{ Form::text('username', null, array('placeholder' => 'root' )) }}
+				{{ Form::text('username', $_ENV['DATABASE_USER'], array('placeholder' => 'root' )) }}
 			</div>
 
 			<div class="field{{ ($errors->has('password')) ? ' error' : '' }}">
 				<label for="password">Password: </label>
-				{{ Form::password('password') }}
+				{{ Form::password('password', $_ENV['DATABASE_PASSWORD']) }}
 			</div>
 
 

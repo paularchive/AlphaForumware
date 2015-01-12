@@ -1,0 +1,1 @@
+<?phpreturn array(	'DATABASE_HOST'		=> '.akajdas',	'DATABASE_NAME' 	=> 'kladjaklsdj',	'DATABASE_USER' 	=> 'adljasdklasdjkla',	'DATABASE_PASSWORD' => 'kaaklsdaskldajsl'
