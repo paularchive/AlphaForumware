@@ -69,3 +69,10 @@ Route::group(array('before' => 'auth'), function()
 {
 	Route::get('/user/logout', array('uses' => 'UserController@getLogout', 'as' => 'user.logout'));
 });
+
+Route::group(array('prefix' => 'install'), function()
+{
+	Route::get('/', ['uses' => 'InstallController@index', 'as' => 'install.index']);
+	Route::get('database', ['uses' => 'InstallController@database', 'as' => 'install.database']);
+	Route::post('database', ['uses' => 'InstallController@database', 'as' => 'install.database']);
+});
