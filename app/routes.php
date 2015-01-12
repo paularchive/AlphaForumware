@@ -74,5 +74,10 @@ Route::group(array('prefix' => 'install'), function()
 {
 	Route::get('/', ['uses' => 'InstallController@index', 'as' => 'install.index']);
 	Route::get('database', ['uses' => 'InstallController@database', 'as' => 'install.database']);
+	Route::get('connection', ['uses' => 'InstallController@connection', 'as' => 'install.connection']);
 	Route::post('database', ['uses' => 'InstallController@database', 'as' => 'install.database']);
+	Route::post('connection', ['uses' => 'InstallController@connection', 'as' => 'install.connection']);
+	Route::get('connection/migrateinstall', ['uses' => 'InstallController@migrateInstall', 'as' => 'install.connection.migrateinstall']);
+	Route::get('connection/migrate', ['uses' => 'InstallController@migrate', 'as' => 'install.connection.migrate']);
+	Route::get('connection/seed', ['uses' => 'InstallController@seed', 'as' => 'install.connection.seed']);
 });

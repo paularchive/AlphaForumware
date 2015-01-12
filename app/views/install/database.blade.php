@@ -86,9 +86,9 @@
 				{{ Form::text('database', $_ENV['DATABASE_NAME'], array('placeholder' => 'forum' )) }}
 			</div>
 
-			<div class="field{{ ($errors->has('username')) ? ' error' : '' }}">
-				<label for="username">Username: </label>
-				{{ Form::text('username', $_ENV['DATABASE_USER'], array('placeholder' => 'root' )) }}
+			<div class="field{{ ($errors->has('user')) ? ' error' : '' }}">
+				<label for="user">User: </label>
+				{{ Form::text('user', $_ENV['DATABASE_USER'], array('placeholder' => 'root' )) }}
 			</div>
 
 			<div class="field{{ ($errors->has('password')) ? ' error' : '' }}">
