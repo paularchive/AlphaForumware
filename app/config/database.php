@@ -1,5 +1,11 @@
 <?php
-
+if(!File::exists(base_path().'/.env.development.php'))
+{
+	$_ENV['DATABASE_HOST'] = null;
+	$_ENV['DATABASE_NAME'] = null;
+	$_ENV['DATABASE_USER'] = null;
+	$_ENV['DATABASE_PASSWORD'] = null;
+}
 return array(
 
 	/*
