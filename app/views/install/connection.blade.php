@@ -54,17 +54,20 @@
 				Database Connection
 			</div>
 			<div class="ui attached segment">
-				<div class="ui indicating progress" id="example4">
+				<div class="ui indicating progress" id="progressbar">
 					<div class="bar">
 						<div class="progress"></div>
 					</div>
 					<div class="label">Installing...</div>
 				</div>
+
+				<div class="ui secondary segment" id="console">
+				</div>
 			</div>
 		</div>
 
 		<div class="right aligned sixteen wide column">
-			<a href="#" class="ui button">Next</a>
+			<a href="#" class="ui button disabled submit">Next</a>
 		</div>
 </div>
 
@@ -73,14 +76,22 @@
 @section('javascript')
 	@parent
 	<script type="text/javascript">
+		$('#progressbar').progress({
+			text: {
+      			success: 'Instalation Complete!'
+      		}
+		});
+	</script>
+	</script>
+	<script type="text/javascript">
 	$.ajax({
 		type: 'GET',
 		url: '{{ URL::route('install.connection.migrateinstall') }}',
 		dataType: 'json',
 		beforeSend: function()
 		{
-			console.log('[INIT] installing migration table...');
-			$('#example4').progress({
+			$('#console').append('<span><span style="color:orange;font-weight:bold;">[INIT]</span> Initializing the migration files...</span><br>');
+			$('#progressbar').progress({
 				percent: 5
 			});
 		},
@@ -88,9 +99,9 @@
 		{
 			if(data.progress !== 'error')
 			{
-				console.log(data.message);
+				$('#console').append('<span>'+data.message+'</span><br>');
 				console.log(data);
-				$('#example4').progress({
+				$('#progressbar').progress({
   					percent: data.progress
 				});
 
@@ -100,15 +111,15 @@
 					dataType: 'json',
 					beforeSend: function()
 					{
-						console.log('[INIT] installing migrating...');
+						$('#console').append('<span><span style="color:orange;font-weight:bold;">[INIT]</span> Initializing migrating...</span><br>');
 					},
 					success: function(data)
 					{
 						if(data.progress !== 'error')
 						{
-							console.log(data.message);
+							$('#console').append('<span>'+data.message+'</span><br>');
 							console.log(data);
-							$('#example4').progress({
+							$('#progressbar').progress({
 								percent: data.progress
 							});
 
@@ -118,30 +129,54 @@
 								dataType: 'json',
 								beforeSend: function()
 								{
-									console.log('[INIT] installing seeder...');
+									$('#console').append('<span><span style="color:orange;font-weight:bold;">[INIT]</span> Initializing database seeder...</span><br>');
 								},
 								success: function(data)
 								{
-									console.log(data.message)
-									console.log(data);
-									$('#example4').progress({
-  										percent: data.progress
-									});
+									if(data.progress !== 'error')
+									{
+										$('#console').append('<span>'+data.message+'</span>')
+										console.log(data);
+										$('#progressbar').progress({
+	  										percent: data.progress,
+	  										text: {
+	      										success: 'Instalation Complete!'
+	      									}
+										});
+										$('.submit').removeClass('disabled');
+									}
+									else
+									{
+										$('#console').append('<span><span style="color:red;font-weight:bold;">[ERROR]</span> See description below.</span><br>');
+										$('#console').append('<span>'+data.message+'</span>')
+										$('#progressbar').progress({
+											percent: 0
+										});
+										$('#progressbar').find('.label').text('An error occured!');
+									}
 								}
 							});
 						}
 						else
 						{
-							console.log('[Error] See description below.');
-							console.log(data)
+							$('#console').append('<span><span style="color:red;font-weight:bold;">[ERROR]</span> See description below.</span><br>');
+							$('#console').append('<span>'+data.message+'</span>')
+							$('#progressbar').progress({
+								percent: 0
+							});
+							$('#progressbar').find('.label').text('An error occured!');
 						}
 					}
 				});
 			}
 			else
 			{
-				console.log('[Error] See description below.');
-				console.log(data)
+				$('#console').append('<span><span style="color:red;font-weight:bold;">[ERROR]</span> See description below.</span><br>');
+				$('#console').append('<span>'+data.message+'</span>')
+				$('#progressbar').progress({
+					percent: 0,
+				});
+				$('#progressbar').find('.label').text('An error occured!');
 			}
 		}
 

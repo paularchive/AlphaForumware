@@ -93,7 +93,7 @@
 
 			<div class="field{{ ($errors->has('password')) ? ' error' : '' }}">
 				<label for="password">Password: </label>
-				{{ Form::password('password', $_ENV['DATABASE_PASSWORD']) }}
+				<input name="password" type="password" value="{{ $_ENV['DATABASE_PASSWORD'] }}">
 			</div>
 
 

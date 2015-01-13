@@ -44,18 +44,40 @@ class InstallController extends \BaseController {
 				$fp = fopen(base_path()."/.env.development.php", 'w');
 	    		fwrite($fp, "<?php\n");
 	    		fwrite($fp, "return array(\n");
-	    		fwrite($fp, "	'DATABASE_HOST'		=> '".Input::get('host')."',\n");
-	    		fwrite($fp, "	'DATABASE_NAME' 	=> '".Input::get('database')."',\n");
-	    		fwrite($fp, "	'DATABASE_USER' 	=> '".Input::get('user')."',\n");
-	    		fwrite($fp, "	'DATABASE_PASSWORD' => '".Input::get('password')."'\n");
+	    		fwrite($fp, "	'DATABASE_HOST'		  => '".Input::get('host')."',\n");
+	    		fwrite($fp, "	'DATABASE_NAME' 	  => '".Input::get('database')."',\n");
+	    		fwrite($fp, "	'DATABASE_USER' 	  => '".Input::get('user')."',\n");
+	    		fwrite($fp, "	'DATABASE_PASSWORD'   => '".Input::get('password')."',\n");
+	    		fwrite($fp, "	'DATABASE_CONNECTION' => false\n");
 	    		fwrite($fp, ");");
 	    		fclose($fp);
 
-	    		return Redirect::route('install.connection');
+	    		try{
+	    			$pdo = DB::connection();
+	    		}
+	    		catch(\PDOException $exception)
+	    		{
+	    			return Redirect::route('install.database')
+	    			->with('message', true)
+	    			->with('msg.type', 'negative')
+	    			->with('msg.header', "Couldn't connect to database!")
+	    			->with('msg.message', "Please check your database credentials.");
+	    		}
+	    			$fp = fopen(base_path()."/.env.development.php", 'w');
+	    			fwrite($fp, "<?php\n");
+	    			fwrite($fp, "return array(\n");
+	    			fwrite($fp, "	'DATABASE_HOST'		  => '".Input::get('host')."',\n");
+	    			fwrite($fp, "	'DATABASE_NAME' 	  => '".Input::get('database')."',\n");
+	    			fwrite($fp, "	'DATABASE_USER' 	  => '".Input::get('user')."',\n");
+	    			fwrite($fp, "	'DATABASE_PASSWORD'   => '".Input::get('password')."',\n");
+	    			fwrite($fp, "	'DATABASE_CONNECTION' => true\n");
+	    			fwrite($fp, ");");
+	    			fclose($fp);
+
+    				return Redirect::route('install.connection');
 	    	}
+	    }
 
-
-		}
 	}
 
 
@@ -66,32 +88,19 @@ class InstallController extends \BaseController {
 	 */
 	public function connection()
 	{
-		if(Request::isMethod('get'))
+		if($_ENV['DATABASE_CONNECTION'])
 		{
-			return View::make('install.connection');
+			if(Schema::hasTable('install'))
+			{	
+				$setting = DB::table('install')->where('install-step', 'db-migrate')->first();
+				if($setting->done)
+					return Redirect::route('install.user');
+			}
+			else
+				return View::make('install.connection');
 		}
-		elseif(Request::ajax())
-		{
-			
-			/*try {
-		    	return $this->sendMessage('10%', '[INIT] migrate:install');
-		      
-		    	return $this->sendMessage('50%', '[INIT] migrating...');
-		    	return $this->sendMessage('80%', '[INIT] seeding data...');
-		    	
-		    } catch (Exception $e) {
-		    	return Response::make($e->getMessage(), 500);
-		    }*/
-
-		    try {
-			    $this->migrateInstall();
-			    $this->migrate();
-			    $this->seed();
-			} 
-			catch (Exception $e) {
-		    	return Response::make($e->getMessage(), 500);
-		    }
-		}
+		else
+			return Redirect::route('install.database');
 	}
 
 	public function migrateInstall()
@@ -104,7 +113,7 @@ class InstallController extends \BaseController {
 			catch (Exception $e) {
 				return $this->sendMessage('error', $e->getMessage());
 			}
-			return $this->sendMessage('40%', '[DONE] migrate:install');
+			return $this->sendMessage('20%', '<span style="color:green;font-weight:bold;">[DONE]</span> Migration files initialized.');
 		}
 		else
 		{
@@ -122,14 +131,13 @@ class InstallController extends \BaseController {
 			catch (Exception $e) {
 				return $this->sendMessage('error', $e->getMessage());
 			}
-			return $this->sendMessage('70%', '[DONE] migrating.');
+			return $this->sendMessage('65%', '<span style="color:green;font-weight:bold;">[DONE]</span> Migrated database.');
 		}
 		else
 		{
 			App::abort(404);
 		}
 	}
-
 	public function seed()
 	{
 		if(Request::ajax())
@@ -140,7 +148,8 @@ class InstallController extends \BaseController {
 			catch (Exception $e) {
 				return $this->sendMessage('error', $e->getMessage());
 			}
-			return $this->sendMessage('100%', '[DONE] seeding data.');
+			DB::table('install')->where('install-step', 'db-migrate')->update(['done' => 1]);
+			return $this->sendMessage('100%', '<span style="color:green;font-weight:bold;">[DONE]</span> Data is seeded.');
 		}
 		else
 		{
@@ -153,52 +162,9 @@ class InstallController extends \BaseController {
 		return Response::json(array('progress' => $progress, 'message' => $message));
 	}
 
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
+	public function user()
 	{
-		//
-	}
-
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
-
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
+		return "WIP!";
 	}
 
 

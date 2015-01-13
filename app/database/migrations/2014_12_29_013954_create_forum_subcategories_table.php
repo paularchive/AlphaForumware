@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateForumSubCategoriesTable extends Migration {
+class CreateForumSubcategoriesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,7 +12,7 @@ class CreateForumSubCategoriesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('forum_subcategories', function(Blueprint $table)
+		Schema::create('forum_subcategories', function($table)
 		{
 			$table->increments('id');
 			$table->string('title');
