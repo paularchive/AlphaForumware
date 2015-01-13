@@ -93,14 +93,14 @@ class InstallController extends \BaseController {
 	{
 		if($_ENV['DATABASE_CONNECTION'])
 		{
-			if(Schema::hasTable('install'))
-			{	
+			/*if(Schema::hasTable('install'))
 				$setting = DB::table('install')->where('install-step', 'db-migrate')->first();
-				if($setting->done)
-					return Redirect::route('install.user');
-			}
 			else
-				return View::make('install.connection');
+				$setting = null;
+			if($setting !== null && $setting->done)
+				return Redirect::route('install.user');
+			else*/
+				return View::make('install.connection');				
 		}
 		else
 			return Redirect::route('install.database');
@@ -110,7 +110,17 @@ class InstallController extends \BaseController {
 	{
 		if(Request::ajax())
 		{
+			if(Schema::hasTable('install'))
+			{
+				$setting = DB::table('install')->where('install-step', 'db-migrate')->first();
+			}
+			else
+				$setting = null;
+
 			try {
+				if($setting !== null && $setting->done)
+					return $this->sendMessage('20%', '<span style="color:lime;font-weight:bold;">[UPDATE]</span> Switching over to update mode...');
+				// Else just exicute the command.
 				Artisan::call('migrate:install');
 			}
 			catch (Exception $e) {
@@ -145,7 +155,16 @@ class InstallController extends \BaseController {
 	{
 		if(Request::ajax())
 		{
+			if(Schema::hasTable('install'))
+			{
+				$setting = DB::table('install')->where('install-step', 'db-migrate')->first();
+			}
+			else
+				$setting = null;
+
 			try{
+				if($setting !== null && $setting->done)
+					return $this->sendMessage('100%', '<span style="color:lime;font-weight:bold;">[UPDATE]</span> Update completed, no seeding needed');
 				Artisan::call('db:seed');
 			}
 			catch (Exception $e) {
