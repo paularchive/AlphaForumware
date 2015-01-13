@@ -53,7 +53,7 @@ class InstallController extends \BaseController {
 	    		fclose($fp);
 
 	    		try{
-	    			$pdo = DB::connection();
+	    			$pdo = new PDO("mysql:host=".Input::get('host').";dbname=".Input::get('database'), Input::get('user'), Input::get('password'));
 	    		}
 	    		catch(\PDOException $exception)
 	    		{
@@ -63,6 +63,8 @@ class InstallController extends \BaseController {
 	    			->with('msg.header', "Couldn't connect to database!")
 	    			->with('msg.message', "Please check your database credentials.");
 	    		}
+	    		if($pdo)
+	    		{
 	    			$fp = fopen(base_path()."/.env.development.php", 'w');
 	    			fwrite($fp, "<?php\n");
 	    			fwrite($fp, "return array(\n");
@@ -75,6 +77,7 @@ class InstallController extends \BaseController {
 	    			fclose($fp);
 
     				return Redirect::route('install.connection');
+    			}
 	    	}
 	    }
 
